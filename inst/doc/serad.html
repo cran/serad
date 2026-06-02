@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content />
+
+
+<title>Prise en main de {serad}</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Prise en main de {serad}</h1>
+<h4 class="author"></h4>
+
+
+
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>Le package <code>{serad}</code> a pour objectif de faciliter la
+rédaction automatisée de textes de conjoncture à partir de séries
+statistiques. Il fournit des fonctions pour :</p>
+<ul>
+<li>calculer des évolutions en pourcentage ou en niveau ;</li>
+<li>formater proprement les valeurs numériques ;</li>
+<li>choisir une formulation nominale ou verbale ;</li>
+<li>tenir compte, si nécessaire, d’une accélération ou d’un
+ralentissement ;</li>
+<li>produire des sorties en français ou en anglais.</li>
+</ul>
+<p>L’idée générale est de séparer :</p>
+<ol style="list-style-type: decimal">
+<li>la <strong>logique économique</strong> (hausse, baisse, stabilité,
+accélération, ralentissement) ;</li>
+<li>la <strong>mise en forme</strong> (pourcentage, points, niveaux,
+dates) ;</li>
+<li>la <strong>rédaction</strong> proprement dite.</li>
+</ol>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(serad)</span></code></pre></div>
+</div>
+<div id="initialisation-et-choix-de-la-langue" class="section level1">
+<h1>Initialisation et choix de la langue</h1>
+<p>Par défaut, le package est chargé en français. Il est toutefois
+possible de basculer en anglais.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">get_serad_language</span>()</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="co">#&gt; [1] &quot;fr&quot;</span></span></code></pre></div>
+<p>Pour passer en anglais :</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">set_serad_language</span>(<span class="st">&quot;en&quot;</span>)</span></code></pre></div>
+<p>Pour revenir au français :</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">set_serad_language</span>(<span class="st">&quot;fr&quot;</span>)</span></code></pre></div>
+<p>On peut également choisir la langue avant le chargement du package
+:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">options</span>(<span class="at">serad.lang =</span> <span class="st">&quot;en&quot;</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="fu">library</span>(serad)</span></code></pre></div>
+</div>
+<div id="calculer-une-évolution" class="section level1">
+<h1>Calculer une évolution</h1>
+<p>La fonction de base est <code>g()</code>. Elle calcule une variation
+relative entre deux niveaux et renvoie le résultat en pourcentage.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">g</span>(<span class="dv">2</span>, <span class="dv">1</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="co">#&gt; [1] 100</span></span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="fu">g</span>(<span class="dv">105</span>, <span class="dv">100</span>)</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="co">#&gt; [1] 5</span></span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a><span class="fu">g</span>(<span class="dv">95</span>, <span class="dv">100</span>)</span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a><span class="co">#&gt; [1] -5</span></span></code></pre></div>
+<p>Par convention :</p>
+<ul>
+<li><code>x1</code> est le niveau le plus récent ;</li>
+<li><code>x2</code> est le niveau le plus ancien.</li>
+</ul>
+<p>Si <code>x2 = 0</code>, une valeur epsilon est utilisée pour éviter
+une division par zéro.</p>
+</div>
+<div id="formater-les-résultats" class="section level1">
+<h1>Formater les résultats</h1>
+<div id="pourcentages" class="section level2">
+<h2>Pourcentages</h2>
+<p><code>format_g()</code> formate une variation en pourcentage.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="fu">format_g</span>(<span class="fl">5.3654</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="co">#&gt; [1] &quot;+5,4 %&quot;</span></span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="fu">format_g</span>(<span class="sc">-</span><span class="fl">5.3654</span>)</span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="co">#&gt; [1] &quot;-5,4 %&quot;</span></span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="fu">format_g</span>(<span class="fl">5.3654</span>, <span class="at">signe =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="co">#&gt; [1] &quot;5,4 %&quot;</span></span></code></pre></div>
+<p>En anglais :</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="fu">set_serad_language</span>(<span class="st">&quot;en&quot;</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="fu">format_g</span>(<span class="fl">5.3654</span>)</span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a><span class="co">#&gt; [1] &quot;+5.4%&quot;</span></span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a><span class="fu">format_g</span>(<span class="sc">-</span><span class="fl">5.3654</span>)</span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a><span class="co">#&gt; [1] &quot;-5.4%&quot;</span></span></code></pre></div>
+<p>Puis on revient en français pour la suite.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="fu">set_serad_language</span>(<span class="st">&quot;fr&quot;</span>)</span></code></pre></div>
+</div>
+<div id="variations-en-points" class="section level2">
+<h2>Variations en points</h2>
+<p><code>format_pts()</code> permet de formater une variation en
+points.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="fu">format_pts</span>(<span class="fl">5.3654</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="co">#&gt; [1] &quot;+5,4 points&quot;</span></span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a><span class="fu">format_pts</span>(<span class="sc">-</span><span class="fl">1.2</span>)</span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a><span class="co">#&gt; [1] &quot;-1,2 point&quot;</span></span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a><span class="fu">format_pts</span>(<span class="fl">1.3654</span>, <span class="at">signe =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a><span class="co">#&gt; [1] &quot;1,4 point&quot;</span></span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a><span class="fu">format_pts</span>(<span class="fl">5.3654</span>, <span class="at">abrev =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a><span class="co">#&gt; [1] &quot;+5,4 pts&quot;</span></span></code></pre></div>
+</div>
+<div id="niveaux-et-différences-de-niveau" class="section level2">
+<h2>Niveaux et différences de niveau</h2>
+<p><code>format_niv()</code> formate un niveau et
+<code>format_delta()</code> une différence de niveau.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="fu">format_niv</span>(<span class="dv">365484</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a><span class="co">#&gt; [1] &quot;365 500&quot;</span></span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a><span class="fu">format_delta</span>(<span class="dv">365484</span>)</span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a><span class="co">#&gt; [1] &quot;+365 500&quot;</span></span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a><span class="fu">format_delta</span>(<span class="sc">-</span><span class="dv">365484</span>)</span>
+<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a><span class="co">#&gt; [1] &quot;-365 500&quot;</span></span></code></pre></div>
+</div>
+</div>
+<div id="décrire-une-évolution-simple" class="section level1">
+<h1>Décrire une évolution simple</h1>
+<p>Pour nuancer l’ampleur d’une évolution, deux fonctions sont utilisées
+:</p>
+<ul>
+<li><code>g_nom(x1, x2)</code> — et sa variante
+<code>g_nom_taux(g)</code> — pour une formulation nominale ;</li>
+<li><code>g_verbe(x1, x2)</code> — et sa variante
+<code>g_verbe_taux(g)</code> — pour une formulation verbale.</li>
+</ul>
+<div id="formulation-nominale" class="section level2">
+<h2>Formulation nominale</h2>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="fu">g_nom</span>(<span class="fl">1.04</span>, <span class="dv">1</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a><span class="co">#&gt; [1] &quot;une forte hausse&quot;</span></span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a><span class="fu">g_nom</span>(<span class="fl">1.001</span>, <span class="dv">1</span>)</span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a><span class="co">#&gt; [1] &quot;une légère hausse&quot;</span></span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a><span class="fu">g_nom</span>(<span class="fl">0.95</span>, <span class="dv">1</span>)</span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a><span class="co">#&gt; [1] &quot;une forte baisse&quot;</span></span></code></pre></div>
+<p>On peut aussi travailler directement à partir d’un taux déjà calculé
+:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="fu">g_nom_taux</span>(<span class="dv">4</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a><span class="co">#&gt; [1] &quot;une forte hausse&quot;</span></span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a><span class="fu">g_nom_taux</span>(<span class="dv">0</span>)</span>
+<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a><span class="co">#&gt; [1] &quot;une stabilité&quot;</span></span>
+<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a><span class="fu">g_nom_taux</span>(<span class="sc">-</span><span class="dv">4</span>)</span>
+<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a><span class="co">#&gt; [1] &quot;une baisse&quot;</span></span></code></pre></div>
+<p>Avec <code>titre = TRUE</code>, l’article initial est supprimé et la
+première lettre est mise en majuscule.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="fu">g_nom_taux</span>(<span class="dv">4</span>, <span class="at">titre =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Forte hausse&quot;</span></span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a><span class="fu">g_nom_taux</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="at">titre =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Baisse&quot;</span></span></code></pre></div>
+</div>
+<div id="formulation-verbale" class="section level2">
+<h2>Formulation verbale</h2>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="fu">g_verbe</span>(<span class="fl">1.10</span>, <span class="dv">1</span>)</span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a><span class="co">#&gt; [1] &quot;bondit de 10,0 %&quot;</span></span>
+<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a><span class="fu">g_verbe</span>(<span class="fl">1.003</span>, <span class="dv">1</span>)</span>
+<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a><span class="co">#&gt; [1] &quot;augmente de 0,3 %&quot;</span></span>
+<span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a><span class="fu">g_verbe</span>(<span class="fl">0.96</span>, <span class="dv">1</span>)</span>
+<span id="cb15-6"><a href="#cb15-6" tabindex="-1"></a><span class="co">#&gt; [1] &quot;baisse de 4,0 %&quot;</span></span></code></pre></div>
+<p>Directement à partir d’un taux :</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a><span class="fu">g_verbe_taux</span>(<span class="dv">10</span>)</span>
+<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a><span class="co">#&gt; [1] &quot;bondit de 10,0 %&quot;</span></span>
+<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a><span class="fu">g_verbe_taux</span>(<span class="dv">0</span>)</span>
+<span id="cb16-4"><a href="#cb16-4" tabindex="-1"></a><span class="co">#&gt; [1] &quot;est stable&quot;</span></span>
+<span id="cb16-5"><a href="#cb16-5" tabindex="-1"></a><span class="fu">g_verbe_taux</span>(<span class="sc">-</span><span class="dv">4</span>)</span>
+<span id="cb16-6"><a href="#cb16-6" tabindex="-1"></a><span class="co">#&gt; [1] &quot;baisse de 4,0 %&quot;</span></span></code></pre></div>
+<p>En cas de stabilité, il est possible de conserver ou non la
+valeur.</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a><span class="fu">g_verbe_taux</span>(<span class="sc">-</span><span class="fl">0.1</span>)</span>
+<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a><span class="co">#&gt; [1] &quot;est stable&quot;</span></span>
+<span id="cb17-3"><a href="#cb17-3" tabindex="-1"></a><span class="fu">g_verbe_taux</span>(<span class="sc">-</span><span class="fl">0.1</span>, <span class="at">stable_sans_valeur =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb17-4"><a href="#cb17-4" tabindex="-1"></a><span class="co">#&gt; [1] &quot;est stable à -0,1 %&quot;</span></span></code></pre></div>
+</div>
+</div>
+<div id="comparaisons-qualitatives" class="section level1">
+<h1>Comparaisons qualitatives</h1>
+<p>Le package propose aussi plusieurs fonctions pour comparer deux
+niveaux de façon qualitative.</p>
+<div id="hausse-baisse-ou-stabilité" class="section level2">
+<h2>Hausse, baisse ou stabilité</h2>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a><span class="fu">alahausse</span>(<span class="fl">1.004</span>, <span class="dv">1</span>)</span>
+<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a><span class="co">#&gt; [1] &quot;à la hausse&quot;</span></span>
+<span id="cb18-3"><a href="#cb18-3" tabindex="-1"></a><span class="fu">alahausse</span>(<span class="fl">0.996</span>, <span class="dv">1</span>)</span>
+<span id="cb18-4"><a href="#cb18-4" tabindex="-1"></a><span class="co">#&gt; [1] &quot;à la baisse&quot;</span></span>
+<span id="cb18-5"><a href="#cb18-5" tabindex="-1"></a><span class="fu">alahausse</span>(<span class="dv">1</span>, <span class="fl">1.0004</span>)</span>
+<span id="cb18-6"><a href="#cb18-6" tabindex="-1"></a><span class="co">#&gt; [1] &quot;inchangé&quot;</span></span></code></pre></div>
+</div>
+<div id="au-dessus-en-dessous" class="section level2">
+<h2>Au-dessus / en dessous</h2>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a><span class="fu">audessus</span>(<span class="fl">1.04</span>, <span class="dv">1</span>)</span>
+<span id="cb19-2"><a href="#cb19-2" tabindex="-1"></a><span class="co">#&gt; [1] &quot;au-dessus&quot;</span></span>
+<span id="cb19-3"><a href="#cb19-3" tabindex="-1"></a><span class="fu">audessus</span>(<span class="fl">0.96</span>, <span class="dv">1</span>)</span>
+<span id="cb19-4"><a href="#cb19-4" tabindex="-1"></a><span class="co">#&gt; [1] &quot;en dessous&quot;</span></span></code></pre></div>
+</div>
+<div id="davantage-moins" class="section level2">
+<h2>Davantage / moins</h2>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a><span class="fu">davantage</span>(<span class="fl">1.04</span>, <span class="dv">1</span>)</span>
+<span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a><span class="co">#&gt; [1] &quot;davantage&quot;</span></span>
+<span id="cb20-3"><a href="#cb20-3" tabindex="-1"></a><span class="fu">davantage</span>(<span class="fl">0.96</span>, <span class="dv">1</span>)</span>
+<span id="cb20-4"><a href="#cb20-4" tabindex="-1"></a><span class="co">#&gt; [1] &quot;moins&quot;</span></span></code></pre></div>
+</div>
+<div id="dépassement-avec-accord-grammatical" class="section level2">
+<h2>Dépassement avec accord grammatical</h2>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a><span class="fu">depasse</span>(<span class="fl">1.04</span>, <span class="dv">1</span>)</span>
+<span id="cb21-2"><a href="#cb21-2" tabindex="-1"></a><span class="co">#&gt; [1] &quot;excèdent&quot;</span></span>
+<span id="cb21-3"><a href="#cb21-3" tabindex="-1"></a><span class="fu">depasse</span>(<span class="fl">1.04</span>, <span class="dv">1</span>, <span class="at">sing =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb21-4"><a href="#cb21-4" tabindex="-1"></a><span class="co">#&gt; [1] &quot;excède&quot;</span></span>
+<span id="cb21-5"><a href="#cb21-5" tabindex="-1"></a><span class="fu">depasse</span>(<span class="fl">0.96</span>, <span class="dv">1</span>)</span>
+<span id="cb21-6"><a href="#cb21-6" tabindex="-1"></a><span class="co">#&gt; [1] &quot;sont en dessous de&quot;</span></span></code></pre></div>
+</div>
+</div>
+<div id="tenir-compte-de-laccélération" class="section level1">
+<h1>Tenir compte de l’accélération</h1>
+<p>Lorsque deux évolutions successives sont disponibles,
+<code>{serad}</code> permet de qualifier non seulement le sens de
+l’évolution, mais aussi son rythme.</p>
+<p>Pour cela, on dispose de :</p>
+<ul>
+<li><code>gETa_nom()</code> et <code>gETa_nom_taux()</code> pour une
+formulation nominale ;</li>
+<li><code>gETa_verbe()</code> et <code>gETa_verbe_taux()</code> pour une
+formulation verbale.</li>
+</ul>
+<div id="exemple-nominal" class="section level2">
+<h2>Exemple nominal</h2>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a><span class="fu">gETa_nom</span>(<span class="fl">1.1</span>, <span class="dv">1</span>, <span class="fl">0.99</span>)</span>
+<span id="cb22-2"><a href="#cb22-2" tabindex="-1"></a><span class="co">#&gt; [1] &quot;une accélération&quot;</span></span>
+<span id="cb22-3"><a href="#cb22-3" tabindex="-1"></a><span class="fu">gETa_nom</span>(<span class="fl">0.96</span>, <span class="dv">1</span>, <span class="fl">1.01</span>)</span>
+<span id="cb22-4"><a href="#cb22-4" tabindex="-1"></a><span class="co">#&gt; [1] &quot;un nouveau recul&quot;</span></span>
+<span id="cb22-5"><a href="#cb22-5" tabindex="-1"></a><span class="fu">gETa_nom</span>(<span class="fl">1.00049</span>, <span class="dv">1</span>, <span class="fl">0.9996</span>)</span>
+<span id="cb22-6"><a href="#cb22-6" tabindex="-1"></a><span class="co">#&gt; [1] &quot;une stabilité&quot;</span></span></code></pre></div>
+</div>
+<div id="exemple-verbal" class="section level2">
+<h2>Exemple verbal</h2>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" tabindex="-1"></a><span class="fu">gETa_verbe</span>(<span class="fl">1.1</span>, <span class="dv">1</span>, <span class="fl">0.99</span>)</span>
+<span id="cb23-2"><a href="#cb23-2" tabindex="-1"></a><span class="co">#&gt; [1] &quot;accélère&quot;</span></span>
+<span id="cb23-3"><a href="#cb23-3" tabindex="-1"></a><span class="fu">gETa_verbe</span>(<span class="fl">0.96</span>, <span class="dv">1</span>, <span class="fl">1.01</span>)</span>
+<span id="cb23-4"><a href="#cb23-4" tabindex="-1"></a><span class="co">#&gt; [1] &quot;recule de nouveau&quot;</span></span>
+<span id="cb23-5"><a href="#cb23-5" tabindex="-1"></a><span class="fu">gETa_verbe</span>(<span class="fl">1.003</span>, <span class="dv">1</span>, <span class="fl">0.99</span>, <span class="at">sing =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb23-6"><a href="#cb23-6" tabindex="-1"></a><span class="co">#&gt; [1] &quot;ralentissent&quot;</span></span></code></pre></div>
+</div>
+<div id="utilisation-dune-variante-alternative" class="section level2">
+<h2>Utilisation d’une variante alternative</h2>
+<p>Certaines fonctions permettent, via l’argument <code>alea</code>,
+d’utiliser une formulation alternative.</p>
+<ul>
+<li><code>alea = 0</code> : formulation principale uniquement ;</li>
+<li><code>alea = 1</code> : formulation alternative systématique ;</li>
+<li>entre 0 et 1 : tirage aléatoire.</li>
+</ul>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb24-2"><a href="#cb24-2" tabindex="-1"></a><span class="fu">gETa_verbe_taux</span>(<span class="dv">10</span>, <span class="dv">1</span>, <span class="at">alea =</span> <span class="dv">1</span>)</span>
+<span id="cb24-3"><a href="#cb24-3" tabindex="-1"></a><span class="co">#&gt; [1] &quot;augmente plus vite&quot;</span></span>
+<span id="cb24-4"><a href="#cb24-4" tabindex="-1"></a><span class="fu">gETa_nom_taux</span>(<span class="dv">10</span>, <span class="dv">1</span>, <span class="at">alea =</span> <span class="dv">1</span>)</span>
+<span id="cb24-5"><a href="#cb24-5" tabindex="-1"></a><span class="co">#&gt; [1] &quot;un regain de dynamisme&quot;</span></span></code></pre></div>
+</div>
+</div>
+<div id="dates-mois-et-trimestres" class="section level1">
+<h1>Dates, mois et trimestres</h1>
+<p>Le package fournit aussi des helpers pour générer des expressions
+temporelles.</p>
+<div id="mois" class="section level2">
+<h2>Mois</h2>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" tabindex="-1"></a><span class="fu">quelMois</span>(<span class="dv">3</span>, <span class="dv">2023</span>)</span>
+<span id="cb25-2"><a href="#cb25-2" tabindex="-1"></a><span class="co">#&gt; [1] &quot;mars 2023&quot;</span></span>
+<span id="cb25-3"><a href="#cb25-3" tabindex="-1"></a><span class="fu">quelMois</span>(<span class="dv">3</span>, <span class="dv">2023</span>, <span class="at">majuscule =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb25-4"><a href="#cb25-4" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Mars 2023&quot;</span></span>
+<span id="cb25-5"><a href="#cb25-5" tabindex="-1"></a><span class="fu">nextMois</span>(<span class="dv">12</span>, <span class="dv">2023</span>)</span>
+<span id="cb25-6"><a href="#cb25-6" tabindex="-1"></a><span class="co">#&gt; [1] &quot;janvier 2024&quot;</span></span>
+<span id="cb25-7"><a href="#cb25-7" tabindex="-1"></a><span class="fu">prevMois</span>(<span class="dv">1</span>, <span class="dv">2023</span>)</span>
+<span id="cb25-8"><a href="#cb25-8" tabindex="-1"></a><span class="co">#&gt; [1] &quot;décembre 2022&quot;</span></span></code></pre></div>
+</div>
+<div id="trimestres" class="section level2">
+<h2>Trimestres</h2>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" tabindex="-1"></a><span class="fu">quelTrim</span>(<span class="dv">3</span>, <span class="dv">2023</span>)</span>
+<span id="cb26-2"><a href="#cb26-2" tabindex="-1"></a><span class="co">#&gt; [1] &quot;troisième trimestre 2023&quot;</span></span>
+<span id="cb26-3"><a href="#cb26-3" tabindex="-1"></a><span class="fu">quelTrim</span>(<span class="dv">3</span>, <span class="dv">2023</span>, <span class="at">majuscule =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb26-4"><a href="#cb26-4" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Troisième trimestre 2023&quot;</span></span>
+<span id="cb26-5"><a href="#cb26-5" tabindex="-1"></a><span class="fu">quelTrim</span>(<span class="dv">3</span>, <span class="dv">2023</span>, <span class="at">type =</span> <span class="st">&quot;chiffres&quot;</span>)</span>
+<span id="cb26-6"><a href="#cb26-6" tabindex="-1"></a><span class="co">#&gt; [1] &quot;3^e^ trimestre 2023&quot;</span></span>
+<span id="cb26-7"><a href="#cb26-7" tabindex="-1"></a><span class="fu">nextTrim</span>(<span class="dv">4</span>, <span class="dv">2023</span>)</span>
+<span id="cb26-8"><a href="#cb26-8" tabindex="-1"></a><span class="co">#&gt; [1] &quot;premier trimestre 2024&quot;</span></span>
+<span id="cb26-9"><a href="#cb26-9" tabindex="-1"></a><span class="fu">prevTrim</span>(<span class="dv">1</span>, <span class="dv">2023</span>)</span>
+<span id="cb26-10"><a href="#cb26-10" tabindex="-1"></a><span class="co">#&gt; [1] &quot;quatrième trimestre 2022&quot;</span></span></code></pre></div>
+</div>
+<div id="détection-dun-mois-dans-un-texte" class="section level2">
+<h2>Détection d’un mois dans un texte</h2>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" tabindex="-1"></a><span class="fu">whichMois</span>(<span class="st">&quot;En Juil 98&quot;</span>)</span>
+<span id="cb27-2"><a href="#cb27-2" tabindex="-1"></a><span class="co">#&gt; [1] 7</span></span>
+<span id="cb27-3"><a href="#cb27-3" tabindex="-1"></a><span class="fu">whichMois</span>(<span class="st">&quot;March 2024&quot;</span>)</span>
+<span id="cb27-4"><a href="#cb27-4" tabindex="-1"></a><span class="co">#&gt; [1] 3</span></span></code></pre></div>
+</div>
+</div>
+<div id="contributions" class="section level1">
+<h1>Contributions</h1>
+<p>La fonction <code>contributions()</code> permet de documenter les
+contributions des différentes composantes à une évolution globale.</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" tabindex="-1"></a>col0 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Y1T1&quot;</span>, <span class="st">&quot;Y1T2&quot;</span>, <span class="st">&quot;Y1trim3&quot;</span>, <span class="st">&quot;Y1T4&quot;</span>, <span class="st">&quot;Y2T1&quot;</span>, <span class="st">&quot;Y2-T2&quot;</span>)</span>
+<span id="cb28-2"><a href="#cb28-2" tabindex="-1"></a>col1 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">12</span>, <span class="dv">6</span>, <span class="dv">2</span>, <span class="dv">86</span>, <span class="dv">19</span>, <span class="dv">10</span>)</span>
+<span id="cb28-3"><a href="#cb28-3" tabindex="-1"></a>col2 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">8</span>, <span class="dv">7</span>, <span class="dv">34</span>, <span class="dv">87</span>, <span class="dv">14</span>)</span>
+<span id="cb28-4"><a href="#cb28-4" tabindex="-1"></a>col3 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">20</span>, <span class="dv">3</span>, <span class="dv">66</span>, <span class="dv">90</span>, <span class="dv">54</span>)</span>
+<span id="cb28-5"><a href="#cb28-5" tabindex="-1"></a>col4 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">29</span>, <span class="dv">12</span>, <span class="dv">4</span>, <span class="dv">16</span>, <span class="dv">40</span>, <span class="dv">94</span>)</span>
+<span id="cb28-6"><a href="#cb28-6" tabindex="-1"></a>col5 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">58</span>, <span class="dv">76</span>, <span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">34</span>, <span class="dv">19</span>)</span>
+<span id="cb28-7"><a href="#cb28-7" tabindex="-1"></a></span>
+<span id="cb28-8"><a href="#cb28-8" tabindex="-1"></a>df1 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(col0, col1, col2, col3, col4, col5)</span>
+<span id="cb28-9"><a href="#cb28-9" tabindex="-1"></a></span>
+<span id="cb28-10"><a href="#cb28-10" tabindex="-1"></a><span class="fu">contributions</span>(df1)</span>
+<span id="cb28-11"><a href="#cb28-11" tabindex="-1"></a><span class="co">#&gt; [1] &quot;col2 contribue pour +92,4 % à l&#39;évolution entre Y2T1 et Y2-T2 ; col3 contribue pour +45,6 % à l&#39;évolution entre Y2T1 et Y2-T2 ; col4 contribue pour -68,4 % à l&#39;évolution entre Y2T1 et Y2-T2 ; &quot;</span></span></code></pre></div>
+<p>En anglais :</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" tabindex="-1"></a><span class="fu">set_serad_language</span>(<span class="st">&quot;en&quot;</span>)</span>
+<span id="cb29-2"><a href="#cb29-2" tabindex="-1"></a><span class="fu">contributions</span>(df1, <span class="at">lang =</span> <span class="st">&quot;en&quot;</span>)</span>
+<span id="cb29-3"><a href="#cb29-3" tabindex="-1"></a><span class="co">#&gt; [1] &quot;col2 accounts for +92.4% of the change between Y2T1 and Y2-T2; col3 accounts for +45.6% of the change between Y2T1 and Y2-T2; col4 accounts for -68.4% of the change between Y2T1 and Y2-T2.&quot;</span></span>
+<span id="cb29-4"><a href="#cb29-4" tabindex="-1"></a><span class="fu">set_serad_language</span>(<span class="st">&quot;fr&quot;</span>)</span></code></pre></div>
+</div>
+<div id="plus-haut-plus-bas-niveau" class="section level1">
+<h1>Plus haut / plus bas niveau</h1>
+<p>La fonction <code>plushautniveau()</code> permet d’indiquer si la
+dernière valeur d’une série correspond au plus haut ou au plus bas
+niveau observé sur une certaine période.</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" tabindex="-1"></a>col0 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Y1T1&quot;</span>, <span class="st">&quot;Y1T2&quot;</span>, <span class="st">&quot;Y1trim3&quot;</span>, <span class="st">&quot;Y1T4&quot;</span>, <span class="st">&quot;Y2T1&quot;</span>, <span class="st">&quot;Y2-T2&quot;</span>)</span>
+<span id="cb30-2"><a href="#cb30-2" tabindex="-1"></a>col1 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">12</span>, <span class="dv">11</span>, <span class="dv">7</span>, <span class="dv">6</span>, <span class="dv">9</span>, <span class="dv">10</span>)</span>
+<span id="cb30-3"><a href="#cb30-3" tabindex="-1"></a>col2 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">12</span>, <span class="dv">11</span>, <span class="dv">7</span>, <span class="dv">6</span>, <span class="dv">9</span>, <span class="dv">14</span>)</span>
+<span id="cb30-4"><a href="#cb30-4" tabindex="-1"></a>col3 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">12</span>, <span class="dv">11</span>, <span class="dv">3</span>, <span class="dv">6</span>, <span class="dv">9</span>, <span class="dv">4</span>)</span>
+<span id="cb30-5"><a href="#cb30-5" tabindex="-1"></a></span>
+<span id="cb30-6"><a href="#cb30-6" tabindex="-1"></a>df2 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(col0, col1, col2, col3)</span>
+<span id="cb30-7"><a href="#cb30-7" tabindex="-1"></a></span>
+<span id="cb30-8"><a href="#cb30-8" tabindex="-1"></a><span class="fu">plushautniveau</span>(df2)</span>
+<span id="cb30-9"><a href="#cb30-9" tabindex="-1"></a><span class="co">#&gt; [1] &quot;C&#39;est le plus haut niveau depuis Y1T2.&quot;</span></span>
+<span id="cb30-10"><a href="#cb30-10" tabindex="-1"></a><span class="fu">plushautniveau</span>(df2, <span class="at">vary =</span> <span class="st">&quot;col2&quot;</span>)</span>
+<span id="cb30-11"><a href="#cb30-11" tabindex="-1"></a><span class="co">#&gt; [1] &quot;C&#39;est le plus haut niveau depuis le début de la série.&quot;</span></span>
+<span id="cb30-12"><a href="#cb30-12" tabindex="-1"></a><span class="fu">plushautniveau</span>(df2, <span class="at">vary =</span> <span class="st">&quot;col3&quot;</span>)</span>
+<span id="cb30-13"><a href="#cb30-13" tabindex="-1"></a><span class="co">#&gt; [1] &quot;C&#39;est le plus bas niveau depuis Y1trim3.&quot;</span></span></code></pre></div>
+</div>
+<div id="version-anglaise" class="section level1">
+<h1>Version anglaise</h1>
+<p>Une fois la langue changée, les fonctions de rédaction et de
+formatage produisent des sorties anglaises.</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" tabindex="-1"></a><span class="fu">set_serad_language</span>(<span class="st">&quot;en&quot;</span>)</span>
+<span id="cb31-2"><a href="#cb31-2" tabindex="-1"></a></span>
+<span id="cb31-3"><a href="#cb31-3" tabindex="-1"></a><span class="fu">g_nom</span>(<span class="fl">1.04</span>, <span class="dv">1</span>)</span>
+<span id="cb31-4"><a href="#cb31-4" tabindex="-1"></a><span class="co">#&gt; [1] &quot;a strong increase&quot;</span></span>
+<span id="cb31-5"><a href="#cb31-5" tabindex="-1"></a><span class="fu">g_verbe</span>(<span class="fl">1.04</span>, <span class="dv">1</span>)</span>
+<span id="cb31-6"><a href="#cb31-6" tabindex="-1"></a><span class="co">#&gt; [1] &quot;rose sharply by 4.0%&quot;</span></span>
+<span id="cb31-7"><a href="#cb31-7" tabindex="-1"></a><span class="fu">gETa_nom</span>(<span class="fl">1.1</span>, <span class="dv">1</span>, <span class="fl">0.99</span>)</span>
+<span id="cb31-8"><a href="#cb31-8" tabindex="-1"></a><span class="co">#&gt; [1] &quot;an acceleration&quot;</span></span>
+<span id="cb31-9"><a href="#cb31-9" tabindex="-1"></a><span class="fu">gETa_verbe</span>(<span class="fl">1.1</span>, <span class="dv">1</span>, <span class="fl">0.99</span>)</span>
+<span id="cb31-10"><a href="#cb31-10" tabindex="-1"></a><span class="co">#&gt; [1] &quot;accelerated&quot;</span></span>
+<span id="cb31-11"><a href="#cb31-11" tabindex="-1"></a><span class="fu">format_g</span>(<span class="fl">5.4</span>)</span>
+<span id="cb31-12"><a href="#cb31-12" tabindex="-1"></a><span class="co">#&gt; [1] &quot;+5.4%&quot;</span></span>
+<span id="cb31-13"><a href="#cb31-13" tabindex="-1"></a><span class="fu">format_pts</span>(<span class="fl">2.3</span>)</span>
+<span id="cb31-14"><a href="#cb31-14" tabindex="-1"></a><span class="co">#&gt; [1] &quot;+2.3 points&quot;</span></span>
+<span id="cb31-15"><a href="#cb31-15" tabindex="-1"></a><span class="fu">format_niv</span>(<span class="dv">365484</span>)</span>
+<span id="cb31-16"><a href="#cb31-16" tabindex="-1"></a><span class="co">#&gt; [1] &quot;365,500&quot;</span></span>
+<span id="cb31-17"><a href="#cb31-17" tabindex="-1"></a><span class="fu">quelMois</span>(<span class="dv">3</span>, <span class="dv">2023</span>)</span>
+<span id="cb31-18"><a href="#cb31-18" tabindex="-1"></a><span class="co">#&gt; [1] &quot;march 2023&quot;</span></span>
+<span id="cb31-19"><a href="#cb31-19" tabindex="-1"></a><span class="fu">quelTrim</span>(<span class="dv">3</span>, <span class="dv">2023</span>)</span>
+<span id="cb31-20"><a href="#cb31-20" tabindex="-1"></a><span class="co">#&gt; [1] &quot;third quarter 2023&quot;</span></span></code></pre></div>
+<p>Retour au français :</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" tabindex="-1"></a><span class="fu">set_serad_language</span>(<span class="st">&quot;fr&quot;</span>)</span></code></pre></div>
+</div>
+<div id="personnaliser-les-règles-de-rédaction" class="section level1">
+<h1>Personnaliser les règles de rédaction</h1>
+<p>Les formulations produites par <code>{serad}</code> reposent sur des
+tables de correspondance stockées dans les options du package.</p>
+<p>Ces options sont initialisées par :</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" tabindex="-1"></a><span class="fu">init_serad_fr</span>()</span>
+<span id="cb33-2"><a href="#cb33-2" tabindex="-1"></a><span class="fu">init_serad_en</span>()</span></code></pre></div>
+<p>Les principales tables sont :</p>
+<ul>
+<li><code>evo_simple</code>, utilisée par <code>g_nom_taux()</code>,
+<code>g_verbe_taux()</code>, <code>g_nom()</code> et
+<code>g_verbe()</code> ;</li>
+<li><code>evo_accel</code>, utilisée par <code>gETa_nom_taux()</code>,
+<code>gETa_verbe_taux()</code>, <code>gETa_nom()</code> et
+<code>gETa_verbe()</code> ;</li>
+<li><code>evo_accel_alt</code>, utilisée pour les formulations
+alternatives lorsque l’argument <code>alea</code> est supérieur à
+0.</li>
+</ul>
+<p>Pour une personnalisation avancée, la méthode recommandée consiste à
+copier le contenu de <code>init_serad_fr()</code> ou
+<code>init_serad_en()</code> dans un fichier de configuration dédié,
+puis à modifier directement les tableaux.</p>
+<p>Par exemple, un utilisateur peut créer un fichier
+<code>init_serad_perso.R</code> :</p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" tabindex="-1"></a>serad0 <span class="ot">&lt;-</span> <span class="fu">init_serad_fr</span>()</span>
+<span id="cb34-2"><a href="#cb34-2" tabindex="-1"></a></span>
+<span id="cb34-3"><a href="#cb34-3" tabindex="-1"></a>serad0<span class="sc">$</span>evo_simple <span class="ot">&lt;-</span> tibble<span class="sc">::</span><span class="fu">tribble</span>(</span>
+<span id="cb34-4"><a href="#cb34-4" tabindex="-1"></a>  <span class="sc">~</span>seuil, <span class="sc">~</span>verbe_sing, <span class="sc">~</span>verbe_plur, <span class="sc">~</span>nom,</span>
+<span id="cb34-5"><a href="#cb34-5" tabindex="-1"></a>  <span class="dv">1</span>,     <span class="st">&quot;augmente&quot;</span>, <span class="st">&quot;augmentent&quot;</span>, <span class="st">&quot;une hausse&quot;</span>,</span>
+<span id="cb34-6"><a href="#cb34-6" tabindex="-1"></a>  <span class="dv">0</span>,     <span class="st">&quot;est stable&quot;</span>, <span class="st">&quot;sont stables&quot;</span>, <span class="st">&quot;une stabilité&quot;</span>,</span>
+<span id="cb34-7"><a href="#cb34-7" tabindex="-1"></a>  <span class="sc">-</span><span class="cn">Inf</span>,  <span class="st">&quot;diminue&quot;</span>, <span class="st">&quot;diminuent&quot;</span>, <span class="st">&quot;une baisse&quot;</span></span>
+<span id="cb34-8"><a href="#cb34-8" tabindex="-1"></a>)</span>
+<span id="cb34-9"><a href="#cb34-9" tabindex="-1"></a></span>
+<span id="cb34-10"><a href="#cb34-10" tabindex="-1"></a><span class="fu">options</span>(<span class="at">serad =</span> serad0)</span></code></pre></div>
+<p>Il est aussi possible de modifier les seuils utilisés pour les
+formulations avec accélération :</p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" tabindex="-1"></a>serad0 <span class="ot">&lt;-</span> <span class="fu">init_serad_fr</span>()</span>
+<span id="cb35-2"><a href="#cb35-2" tabindex="-1"></a></span>
+<span id="cb35-3"><a href="#cb35-3" tabindex="-1"></a>serad0<span class="sc">$</span>seuil<span class="sc">$</span>stable <span class="ot">&lt;-</span> <span class="fl">0.1</span></span>
+<span id="cb35-4"><a href="#cb35-4" tabindex="-1"></a>serad0<span class="sc">$</span>seuil<span class="sc">$</span>accel_hausse <span class="ot">&lt;-</span> <span class="dv">40</span></span>
+<span id="cb35-5"><a href="#cb35-5" tabindex="-1"></a>serad0<span class="sc">$</span>seuil<span class="sc">$</span>accel_baisse <span class="ot">&lt;-</span> <span class="sc">-</span><span class="dv">40</span></span>
+<span id="cb35-6"><a href="#cb35-6" tabindex="-1"></a></span>
+<span id="cb35-7"><a href="#cb35-7" tabindex="-1"></a><span class="fu">options</span>(<span class="at">serad =</span> serad0)</span></code></pre></div>
+<p>Cette approche est volontairement simple : elle permet de
+personnaliser l’ensemble des règles de rédaction dans un fichier
+versionné, sans modifier le code interne du package.</p>
+<p>Pour plus de détails, consulter :</p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" tabindex="-1"></a>?init_serad</span></code></pre></div>
+</div>
+<div id="bonnes-pratiques" class="section level1">
+<h1>Bonnes pratiques</h1>
+<p>Pour utiliser <code>{serad}</code> efficacement dans une chaîne de
+production, il est recommandé de :</p>
+<ul>
+<li>fixer explicitement la langue au début du script ;</li>
+<li>distinguer les fonctions de calcul, de formatage et de rédaction
+;</li>
+<li>éviter d’écrire du texte en dur dans les scripts lorsque le package
+peut déjà produire la formulation souhaitée ;</li>
+<li>tester les rendus en français et en anglais dans une session
+propre.</li>
+</ul>
+<p>Par exemple :</p>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" tabindex="-1"></a><span class="fu">options</span>(<span class="at">serad.lang =</span> <span class="st">&quot;en&quot;</span>)</span>
+<span id="cb37-2"><a href="#cb37-2" tabindex="-1"></a><span class="fu">library</span>(serad)</span>
+<span id="cb37-3"><a href="#cb37-3" tabindex="-1"></a></span>
+<span id="cb37-4"><a href="#cb37-4" tabindex="-1"></a><span class="co"># ou après chargement</span></span>
+<span id="cb37-5"><a href="#cb37-5" tabindex="-1"></a><span class="fu">set_serad_language</span>(<span class="st">&quot;en&quot;</span>)</span></code></pre></div>
+</div>
+<div id="conclusion" class="section level1">
+<h1>Conclusion</h1>
+<p>Le package <code>{serad}</code> permet de standardiser et
+d’automatiser une grande partie de la rédaction conjoncturelle. Il est
+particulièrement utile lorsque les mêmes structures de phrases doivent
+être réutilisées dans des publications récurrentes, tout en conservant
+:</p>
+<ul>
+<li>une cohérence de style ;</li>
+<li>une précision dans les formulations ;</li>
+<li>et désormais une capacité de sortie en français comme en
+anglais.</li>
+</ul>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

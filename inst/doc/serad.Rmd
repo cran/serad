@@ -1,0 +1,432 @@
+---
+title: "Prise en main de {serad}"
+author: ""
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Prise en main de {serad}}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  warning = FALSE,
+  message = FALSE
+)
+```
+
+# Introduction
+
+Le package `{serad}` a pour objectif de faciliter la rédaction automatisée de textes de conjoncture à partir de séries statistiques. Il fournit des fonctions pour :
+
+- calculer des évolutions en pourcentage ou en niveau ;
+- formater proprement les valeurs numériques ;
+- choisir une formulation nominale ou verbale ;
+- tenir compte, si nécessaire, d'une accélération ou d'un ralentissement ;
+- produire des sorties en français ou en anglais.
+
+L'idée générale est de séparer :
+
+1. la **logique économique** (hausse, baisse, stabilité, accélération, ralentissement) ;
+2. la **mise en forme** (pourcentage, points, niveaux, dates) ;
+3. la **rédaction** proprement dite.
+
+```{r setup}
+library(serad)
+```
+
+# Initialisation et choix de la langue
+
+Par défaut, le package est chargé en français. Il est toutefois possible de basculer en anglais.
+
+```{r}
+get_serad_language()
+```
+
+Pour passer en anglais :
+
+```{r, eval = FALSE}
+set_serad_language("en")
+```
+
+Pour revenir au français :
+
+```{r, eval = FALSE}
+set_serad_language("fr")
+```
+
+On peut également choisir la langue avant le chargement du package :
+
+```{r, eval = FALSE}
+options(serad.lang = "en")
+library(serad)
+```
+
+# Calculer une évolution
+
+La fonction de base est `g()`. Elle calcule une variation relative entre deux niveaux et renvoie le résultat en pourcentage.
+
+```{r}
+g(2, 1)
+g(105, 100)
+g(95, 100)
+```
+
+Par convention :
+
+- `x1` est le niveau le plus récent ;
+- `x2` est le niveau le plus ancien.
+
+Si `x2 = 0`, une valeur epsilon est utilisée pour éviter une division par zéro.
+
+# Formater les résultats
+
+## Pourcentages
+
+`format_g()` formate une variation en pourcentage.
+
+```{r}
+format_g(5.3654)
+format_g(-5.3654)
+format_g(5.3654, signe = FALSE)
+```
+
+En anglais :
+
+```{r}
+set_serad_language("en")
+format_g(5.3654)
+format_g(-5.3654)
+```
+
+Puis on revient en français pour la suite.
+
+```{r}
+set_serad_language("fr")
+```
+
+## Variations en points
+
+`format_pts()` permet de formater une variation en points.
+
+```{r}
+format_pts(5.3654)
+format_pts(-1.2)
+format_pts(1.3654, signe = FALSE)
+format_pts(5.3654, abrev = TRUE)
+```
+
+## Niveaux et différences de niveau
+
+`format_niv()` formate un niveau et `format_delta()` une différence de niveau.
+
+```{r}
+format_niv(365484)
+format_delta(365484)
+format_delta(-365484)
+```
+
+# Décrire une évolution simple
+
+Pour nuancer l'ampleur d'une évolution, deux fonctions sont utilisées :
+
+- `g_nom(x1, x2)` — et sa variante `g_nom_taux(g)` — pour une formulation nominale ;
+- `g_verbe(x1, x2)` — et sa variante `g_verbe_taux(g)` — pour une formulation verbale.
+
+## Formulation nominale
+
+```{r}
+g_nom(1.04, 1)
+g_nom(1.001, 1)
+g_nom(0.95, 1)
+```
+
+On peut aussi travailler directement à partir d'un taux déjà calculé :
+
+```{r}
+g_nom_taux(4)
+g_nom_taux(0)
+g_nom_taux(-4)
+```
+
+Avec `titre = TRUE`, l'article initial est supprimé et la première lettre est mise en majuscule.
+
+```{r}
+g_nom_taux(4, titre = TRUE)
+g_nom_taux(-4, titre = TRUE)
+```
+
+## Formulation verbale
+
+```{r}
+g_verbe(1.10, 1)
+g_verbe(1.003, 1)
+g_verbe(0.96, 1)
+```
+
+Directement à partir d'un taux :
+
+```{r}
+g_verbe_taux(10)
+g_verbe_taux(0)
+g_verbe_taux(-4)
+```
+
+En cas de stabilité, il est possible de conserver ou non la valeur.
+
+```{r}
+g_verbe_taux(-0.1)
+g_verbe_taux(-0.1, stable_sans_valeur = FALSE)
+```
+
+# Comparaisons qualitatives
+
+Le package propose aussi plusieurs fonctions pour comparer deux niveaux de façon qualitative.
+
+## Hausse, baisse ou stabilité
+
+```{r}
+alahausse(1.004, 1)
+alahausse(0.996, 1)
+alahausse(1, 1.0004)
+```
+
+## Au-dessus / en dessous
+
+```{r}
+audessus(1.04, 1)
+audessus(0.96, 1)
+```
+
+## Davantage / moins
+
+```{r}
+davantage(1.04, 1)
+davantage(0.96, 1)
+```
+
+## Dépassement avec accord grammatical
+
+```{r}
+depasse(1.04, 1)
+depasse(1.04, 1, sing = TRUE)
+depasse(0.96, 1)
+```
+
+# Tenir compte de l'accélération
+
+Lorsque deux évolutions successives sont disponibles, `{serad}` permet de qualifier non seulement le sens de l'évolution, mais aussi son rythme.
+
+Pour cela, on dispose de :
+
+- `gETa_nom()` et `gETa_nom_taux()` pour une formulation nominale ;
+- `gETa_verbe()` et `gETa_verbe_taux()` pour une formulation verbale.
+
+## Exemple nominal
+
+```{r}
+gETa_nom(1.1, 1, 0.99)
+gETa_nom(0.96, 1, 1.01)
+gETa_nom(1.00049, 1, 0.9996)
+```
+
+## Exemple verbal
+
+```{r}
+gETa_verbe(1.1, 1, 0.99)
+gETa_verbe(0.96, 1, 1.01)
+gETa_verbe(1.003, 1, 0.99, sing = FALSE)
+```
+
+## Utilisation d'une variante alternative
+
+Certaines fonctions permettent, via l'argument `alea`, d'utiliser une formulation alternative.
+
+- `alea = 0` : formulation principale uniquement ;
+- `alea = 1` : formulation alternative systématique ;
+- entre 0 et 1 : tirage aléatoire.
+
+```{r}
+set.seed(123)
+gETa_verbe_taux(10, 1, alea = 1)
+gETa_nom_taux(10, 1, alea = 1)
+```
+
+# Dates, mois et trimestres
+
+Le package fournit aussi des helpers pour générer des expressions temporelles.
+
+## Mois
+
+```{r}
+quelMois(3, 2023)
+quelMois(3, 2023, majuscule = TRUE)
+nextMois(12, 2023)
+prevMois(1, 2023)
+```
+
+## Trimestres
+
+```{r}
+quelTrim(3, 2023)
+quelTrim(3, 2023, majuscule = TRUE)
+quelTrim(3, 2023, type = "chiffres")
+nextTrim(4, 2023)
+prevTrim(1, 2023)
+```
+
+## Détection d'un mois dans un texte
+
+```{r}
+whichMois("En Juil 98")
+whichMois("March 2024")
+```
+
+# Contributions
+
+La fonction `contributions()` permet de documenter les contributions des différentes composantes à une évolution globale.
+
+```{r}
+col0 <- c("Y1T1", "Y1T2", "Y1trim3", "Y1T4", "Y2T1", "Y2-T2")
+col1 <- c(12, 6, 2, 86, 19, 10)
+col2 <- c(4, 8, 7, 34, 87, 14)
+col3 <- c(10, 20, 3, 66, 90, 54)
+col4 <- c(29, 12, 4, 16, 40, 94)
+col5 <- c(58, 76, 1, 3, 34, 19)
+
+df1 <- data.frame(col0, col1, col2, col3, col4, col5)
+
+contributions(df1)
+```
+
+En anglais :
+
+```{r}
+set_serad_language("en")
+contributions(df1, lang = "en")
+set_serad_language("fr")
+```
+
+# Plus haut / plus bas niveau
+
+La fonction `plushautniveau()` permet d'indiquer si la dernière valeur d'une série correspond au plus haut ou au plus bas niveau observé sur une certaine période.
+
+```{r}
+col0 <- c("Y1T1", "Y1T2", "Y1trim3", "Y1T4", "Y2T1", "Y2-T2")
+col1 <- c(12, 11, 7, 6, 9, 10)
+col2 <- c(12, 11, 7, 6, 9, 14)
+col3 <- c(12, 11, 3, 6, 9, 4)
+
+df2 <- data.frame(col0, col1, col2, col3)
+
+plushautniveau(df2)
+plushautniveau(df2, vary = "col2")
+plushautniveau(df2, vary = "col3")
+```
+
+# Version anglaise
+
+Une fois la langue changée, les fonctions de rédaction et de formatage produisent des sorties anglaises.
+
+```{r}
+set_serad_language("en")
+
+g_nom(1.04, 1)
+g_verbe(1.04, 1)
+gETa_nom(1.1, 1, 0.99)
+gETa_verbe(1.1, 1, 0.99)
+format_g(5.4)
+format_pts(2.3)
+format_niv(365484)
+quelMois(3, 2023)
+quelTrim(3, 2023)
+```
+
+Retour au français :
+
+```{r}
+set_serad_language("fr")
+```
+
+# Personnaliser les règles de rédaction
+
+Les formulations produites par `{serad}` reposent sur des tables de correspondance stockées dans les options du package.
+
+Ces options sont initialisées par :
+
+```{r, eval = FALSE}
+init_serad_fr()
+init_serad_en()
+```
+
+Les principales tables sont :
+
+- `evo_simple`, utilisée par `g_nom_taux()`, `g_verbe_taux()`, `g_nom()` et `g_verbe()` ;
+- `evo_accel`, utilisée par `gETa_nom_taux()`, `gETa_verbe_taux()`, `gETa_nom()` et `gETa_verbe()` ;
+- `evo_accel_alt`, utilisée pour les formulations alternatives lorsque l'argument `alea` est supérieur à 0.
+
+Pour une personnalisation avancée, la méthode recommandée consiste à copier le contenu de `init_serad_fr()` ou `init_serad_en()` dans un fichier de configuration dédié, puis à modifier directement les tableaux.
+
+Par exemple, un utilisateur peut créer un fichier `init_serad_perso.R` :
+
+```{r, eval = FALSE}
+serad0 <- init_serad_fr()
+
+serad0$evo_simple <- tibble::tribble(
+  ~seuil, ~verbe_sing, ~verbe_plur, ~nom,
+  1,     "augmente", "augmentent", "une hausse",
+  0,     "est stable", "sont stables", "une stabilité",
+  -Inf,  "diminue", "diminuent", "une baisse"
+)
+
+options(serad = serad0)
+```
+
+Il est aussi possible de modifier les seuils utilisés pour les formulations avec accélération :
+
+```{r, eval = FALSE}
+serad0 <- init_serad_fr()
+
+serad0$seuil$stable <- 0.1
+serad0$seuil$accel_hausse <- 40
+serad0$seuil$accel_baisse <- -40
+
+options(serad = serad0)
+```
+
+Cette approche est volontairement simple : elle permet de personnaliser l'ensemble des règles de rédaction dans un fichier versionné, sans modifier le code interne du package.
+
+Pour plus de détails, consulter :
+
+```{r, eval = FALSE}
+?init_serad
+```
+
+# Bonnes pratiques
+
+Pour utiliser `{serad}` efficacement dans une chaîne de production, il est recommandé de :
+
+- fixer explicitement la langue au début du script ;
+- distinguer les fonctions de calcul, de formatage et de rédaction ;
+- éviter d'écrire du texte en dur dans les scripts lorsque le package peut déjà produire la formulation souhaitée ;
+- tester les rendus en français et en anglais dans une session propre.
+
+Par exemple :
+
+```{r, eval = FALSE}
+options(serad.lang = "en")
+library(serad)
+
+# ou après chargement
+set_serad_language("en")
+```
+
+# Conclusion
+
+Le package `{serad}` permet de standardiser et d'automatiser une grande partie de la rédaction conjoncturelle. Il est particulièrement utile lorsque les mêmes structures de phrases doivent être réutilisées dans des publications récurrentes, tout en conservant :
+
+- une cohérence de style ;
+- une précision dans les formulations ;
+- et désormais une capacité de sortie en français comme en anglais.

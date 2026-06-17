@@ -33,7 +33,7 @@ test_that("gETa_nom_taux - hiérarchie des cas", {
 
   # ---- Baisse ----
   expect_equal(gETa_nom_taux(-0.1, -1),
-               "une poursuite de la baisse")
+               "un ralentissement de la baisse")
 
   expect_equal(gETa_nom_taux(-4, -1, TRUE),
                "Nouveau recul")
@@ -51,7 +51,7 @@ test_that("gETa_nom_taux - aléatoire", {
 
   # ---- Stabilisation ----
   res <- gETa_nom_taux(0.049, 2, alea = 0.5)
-  expect_true(res %in% c("une stabilisation", "un essoufflement"))
+  expect_true(res %in% c("une stabilisation", "une stabilisation"))
 
   # ---- Hausse ----
   res <- gETa_nom_taux(1, 1, alea = 0.5)
@@ -63,7 +63,7 @@ test_that("gETa_nom_taux - aléatoire", {
 
   # ---- Baisse ----
   res <- gETa_nom_taux(-0.1, -1, alea = 0.5)
-  expect_true(res %in% c("une poursuite de la baisse", "un repli"))
+  expect_true(res %in% c("un ralentissement de la baisse", "une baisse moins forte"))
 
   # ---- Chute ----
   res <- gETa_nom_taux(-21, 1, alea = 0.5)

@@ -15,12 +15,12 @@ test_that("gETa_nom - hiérarchie des cas", {
   # ---- Accélération ----
   expect_equal(
     gETa_nom(1.1, 1, 0.99),
-    "une accélération"
+    "une forte hausse"
   )
 
   expect_equal(
     gETa_nom(1.1, 1, 0.99, TRUE),
-    "Accélération"
+    "Forte hausse"
   )
 
   # ---- Hausse simple ----
@@ -47,7 +47,7 @@ test_that("gETa_nom - hiérarchie des cas", {
   # ---- Baisse ----
   expect_equal(
     gETa_nom(0.999, 1, 1.01),
-    "une poursuite de la baisse"
+    "un ralentissement de la baisse"
   )
 
   expect_equal(
@@ -77,11 +77,11 @@ test_that("gETa_nom - aléatoire", {
 
   # ---- Accélération ----
   res <- gETa_nom(1.1, 1, 0.99, alea = 0.5)
-  expect_true(res %in% c("une accélération", "un regain de dynamisme"))
+  expect_true(res %in% c("une forte hausse", "une forte croissance"))
 
   # ---- Stabilisation ----
   res <- gETa_nom(1.00049, 1, 0.98, alea = 0.5)
-  expect_true(res %in% c("une stabilisation", "un essoufflement"))
+  expect_true(res %in% c("une stabilisation", "une stabilisation"))
 
   # ---- Hausse ----
   expect_warning(gETa_nom(1.01, 1, 1, alea = 0.5),
@@ -95,7 +95,7 @@ test_that("gETa_nom - aléatoire", {
 
   # ---- Baisse ----
   res <- gETa_nom(0.99, 1, 1.01, alea = 0.5)
-  expect_true(res %in% c("une poursuite de la baisse", "un repli"))
+  expect_true(res %in% c("une poursuite de la baisse", "une poursuite de la baisse"))
 
   # ---- Chute ----
   res <- gETa_nom(0.79, 1, 1.01, alea = 0.5)

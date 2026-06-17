@@ -82,16 +82,7 @@ gETa_verbe_taux <- function(g1, g2,
 
   env <- list2env(c(
     list(g1 = g1, g2 = g2, a = a),
-    list(
-      seuil_stable       = seuil$stable,
-      seuil_g2_bas       = seuil$g2_bas,
-      seuil_g2_haut      = seuil$g2_haut,
-      seuil_g1_bas       = seuil$g1_bas,
-      seuil_g1_tres_bas  = seuil$g1_tres_bas,
-      seuil_accel_hausse = seuil$accel_hausse,
-      seuil_accel_baisse = seuil$accel_baisse,
-      seuil_accel_recul  = seuil$accel_recul
-    )
+    seuil
   ))
 
   for (i in seq_len(nrow(tab))) {

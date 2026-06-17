@@ -2,7 +2,7 @@
 #' @export
 init_serad_fr <- function() {
 
-  # ###                          Parametres globaux                          -----
+  # ###                         Parametres globaux                         -----
 
   serad0 <- list()
 
@@ -22,7 +22,7 @@ init_serad_fr <- function() {
   # - format_delta()
   serad0$moins <- "-"
 
-  # ###                           Evolution simple                           -----
+  # ###                          Evolution simple                          -----
 
   # Table principale utilisee par :
   # - g_verbe_taux()
@@ -30,7 +30,7 @@ init_serad_fr <- function() {
   # - g_verbe()
   # - g_nom()
   #
-  # Associe une variation (g) a :
+  # Permet d’associer une variation (g) à :
   # - un verbe (singulier / pluriel)
   # - une formulation nominale
   evo_simple <- tibble::tribble(
@@ -51,7 +51,7 @@ init_serad_fr <- function() {
 
   serad0$evo_simple <- evo_simple
 
-  # ###                      Evolution avec acceleration                     -----
+  # ###                     Evolution avec acceleration                    -----
 
   # Seuils utilises dans :
   # - gETa_verbe_taux()
@@ -61,14 +61,18 @@ init_serad_fr <- function() {
   #
   # Definissent la logique d'acceleration / ralentissement
   serad0$seuil <- list(
-    stable = 0.05,
-    g2_bas = -0.5,
-    g2_haut = 0.95,
-    g1_bas = -10,
-    g1_tres_bas = -20,
-    accel_hausse = 30,
-    accel_baisse = -30,
-    accel_recul = 30
+    seuil_stable = 0.05,
+
+    seuil_g1_tres_haut = 20,
+    seuil_g1_haut = 10,
+    seuil_g1_bas = -10,
+    seuil_g1_tres_bas = -20,
+
+    seuil_g2_bas = -0.5,
+    seuil_g2_haut = 0.95,
+
+    seuil_accel_pos = 30,
+    seuil_accel_neg = -30
   )
 
   # Table principale utilisee par :
@@ -84,15 +88,25 @@ init_serad_fr <- function() {
   evo_accel <- tibble::tribble(
     ~cond_g1, ~cond_g2, ~cond_a, ~verbe_sing, ~verbe_plur, ~nom,
 
-    # Hausse forte
-    "g1 >= seuil_stable", "g2 >= seuil_stable", "a > seuil_accel_hausse",
+    # Forte hausse
+    "g1 > seuil_g1_tres_haut", "TRUE", "TRUE",
+    "s'envole", "s'envolent", "une envol\u00e9e",
+
+    "g1 <= seuil_g1_tres_haut & g1 > seuil_g1_haut", "g2 >= seuil_g2_bas", "TRUE",
+    "augmente fortement", "augmentent fortement", "une forte hausse",
+
+    "g1 <= seuil_g1_tres_haut & g1 > seuil_g1_haut", "g2 < seuil_g2_bas", "TRUE",
+    "rebondit fortement", "rebondissent fortement", "un fort rebond",
+
+    # Hausse
+    "g1 >= seuil_stable", "g2 >= seuil_stable", "a > seuil_accel_pos",
     "acc\u00E9l\u00E8re", "acc\u00E9l\u00E8rent", "une acc\u00E9l\u00E9ration",
 
-    "g1 >= seuil_stable", "g2 >= seuil_stable", "a < seuil_accel_baisse",
-    "ralentit", "ralentissent", "un ralentissement",
-
-    "g1 >= seuil_stable", "g2 >= seuil_stable", "a >= seuil_accel_baisse & a <= seuil_accel_hausse",
+    "g1 >= seuil_stable", "g2 >= seuil_stable", "a >= seuil_accel_neg & a <= seuil_accel_pos",
     "poursuit sa hausse", "poursuivent leur hausse", "une poursuite de la hausse",
+
+    "g1 >= seuil_stable", "g2 >= seuil_stable", "a < seuil_accel_neg",
+    "ralentit", "ralentissent", "un ralentissement",
 
     "g1 >= seuil_stable", "g2 >= seuil_g2_bas & g2 < seuil_stable", "TRUE",
     "augmente", "augmentent", "une hausse",
@@ -114,15 +128,18 @@ init_serad_fr <- function() {
     "g1 >= seuil_g1_bas & g1 < -seuil_stable", "g2 >= -seuil_stable & g2 <= seuil_g2_haut", "TRUE",
     "baisse", "baissent", "une baisse",
 
-    "g1 >= seuil_g1_bas & g1 < -seuil_stable", "g2 < -seuil_stable", "a > seuil_accel_recul",
+    "g1 >= seuil_g1_bas & g1 < -seuil_stable", "g2 < -seuil_stable", "a > seuil_accel_pos",
     "recule de nouveau", "reculent de nouveau", "un nouveau recul",
 
-    "g1 >= seuil_g1_bas & g1 < -seuil_stable", "g2 < -seuil_stable", "a <= seuil_accel_recul",
+    "g1 >= seuil_g1_bas & g1 < -seuil_stable", "g2 < -seuil_stable", "a >= seuil_accel_neg & a <= seuil_accel_pos",
     "poursuit sa baisse", "poursuivent leur baisse", "une poursuite de la baisse",
+
+    "g1 >= seuil_g1_bas & g1 < -seuil_stable", "g2 < -seuil_stable", "a < seuil_accel_neg",
+    "ralentit dans sa baisse", "ralentissent dans leur baisse", "un ralentissement de la baisse",
 
     # Baisse forte
     "g1 >= seuil_g1_tres_bas & g1 < seuil_g1_bas", "g2 > seuil_g2_haut", "TRUE",
-    "se replie fortement", "se replie fortement", "un fort repli",
+    "se replie fortement", "se replient fortement", "un fort repli",
 
     "g1 >= seuil_g1_tres_bas & g1 < seuil_g1_bas", "g2 <= seuil_g2_haut", "TRUE",
     "baisse fortement", "baissent fortement", "une forte baisse",
@@ -140,27 +157,30 @@ init_serad_fr <- function() {
   # Permet d'introduire de la variabilite via le parametre alea
   evo_accel_alt <- tibble::tribble(
     ~verbe_sing_alt, ~verbe_plur_alt, ~nom_alt,
-
-    "augmente plus vite",      "augmentent plus vite",       "un regain de dynamisme",
-    "se mod\u00E8re",          "se mod\u00E8rent",           "un essoufflement",
-    "continue d'augmenter",    "continuent d'augmenter",     "le prolongement de la hausse",
-    "progresse",               "progressent",                "une progression",
-    "se redresse",             "se redressent",              "un redressement",
-    "se fige",                 "se figent",                  "une stabilisation",
-    "demeure stable",          "demeurent stables",          "une stabilit\u00E9",
-    "recul",                   "reculent",                   "un recul",
-    "diminue",                 "diminuent",                  "une diminution",
-    "repart \u00E0 la baisse", "repartent \u00E0 la baisse", "un nouveau recul",
-    "poursuit sa baisse",      "poursuivent leur baisse",    "une poursuite de la baisse",
-    "recul fortement",         "recul fortement",            "un fort recul",
-    "diminue fortement",       "diminuent fortement",        "une forte diminution",
-    "s'effondre",              "s'effondrent",               "un effondrement"
+    "augmente tr\u00e8s fortement", "augmentent tr\u00e8s fortement", "une tr\u00e8s forte hausse",
+    "cro\u00eet fortement",         "croissent fortement",            "une forte croissance",
+    "se redresse fortement",        "se redressent fortement",        "un fort redressement",
+    "augmente plus vite",           "augmentent plus vite",           "un regain de dynamisme",
+    "continue d'augmenter",         "continuent d'augmenter",         "le prolongement de la hausse",
+    "se mod\u00E8re",               "se mod\u00E8rent",               "un essoufflement",
+    "progresse",                    "progressent",                    "une progression",
+    "se redresse",                  "se redressent",                  "un redressement",
+    "se fige",                      "se figent",                      "une stabilisation",
+    "demeure stable",               "demeurent stables",              "une stabilit\u00E9",
+    "recul",                        "reculent",                       "un recul",
+    "diminue",                      "diminuent",                      "une diminution",
+    "repart \u00E0 la baisse",      "repartent \u00E0 la baisse",     "un nouveau recul",
+    "poursuit sa baisse",           "poursuivent leur baisse",        "une poursuite de la baisse",
+    "baisse moins fortement",       "baissent moins fortement",       "une baisse moins forte",
+    "recul fortement",              "recul fortement",                "un fort recul",
+    "diminue fortement",            "diminuent fortement",            "une forte diminution",
+    "s'effondre",                   "s'effondrent",                   "un effondrement"
   )
 
   serad0$evo_accel <- evo_accel
   serad0$evo_accel_alt <- evo_accel_alt
 
-  # ###                      Enregistrement des options                      -----
+  # ###                     Enregistrement des options                     -----
 
   options(serad = serad0)
   invisible(serad0)

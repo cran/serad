@@ -1,4 +1,4 @@
-dbca8c491869f0f0c3543380e9576d63 *DESCRIPTION
+b8d0953c7e21e1ab95b12574ba555508 *DESCRIPTION
 8db178dae9afe26425dc98d8e33be035 *LICENSE
 f600d1a0713d88b9e1ea61812e19944d *NAMESPACE
 69650adbb5270bb83e484abcfb1b0139 *NEWS.md
@@ -21,8 +21,8 @@ dd67774b5c443f6d8d60c73f7b5525e9 *R/gETa_verbe_taux.R
 8dd7b76d50a2044bebe3a9ab50f1a6cd *R/g_verbe.R
 5fef3d7cd0754431d55f863697ee6d7b *R/g_verbe_taux.R
 eb0f2b552049c437a48d4ef2cc5cbdfb *R/init_serad_doc.R
-e8eb7709c93cc466ee44413e49fd518e *R/init_serad_en.R
-4a683c77de5e11d6f1b46fbc25b0c8cc *R/init_serad_fr.R
+07805a55a5fcfd1ead866ff521433623 *R/init_serad_en.R
+6e597bd3cf3fd144f0717fe0eedc271d *R/init_serad_fr.R
 e29dd4f1c4537b285c54a803566af50d *R/plushautniveau.R
 1f5656f1caf5dccf63b2c0295aa4ba70 *R/quelTrim.R
 9f9e41cb74a5702cc71152a9371a3b8b *R/s.R

@@ -92,33 +92,33 @@ init_serad_fr <- function() {
     "g1 > seuil_g1_tres_haut", "TRUE", "TRUE",
     "s'envole", "s'envolent", "une envol\u00e9e",
 
-    "g1 <= seuil_g1_tres_haut & g1 > seuil_g1_haut", "g2 >= seuil_g2_bas", "TRUE",
+    "g1 > seuil_g1_haut & g1 <= seuil_g1_tres_haut", "g2 >= seuil_g2_bas", "TRUE",
     "augmente fortement", "augmentent fortement", "une forte hausse",
 
-    "g1 <= seuil_g1_tres_haut & g1 > seuil_g1_haut", "g2 < seuil_g2_bas", "TRUE",
+    "g1 > seuil_g1_haut & g1 <= seuil_g1_tres_haut", "g2 < seuil_g2_bas", "TRUE",
     "rebondit fortement", "rebondissent fortement", "un fort rebond",
 
     # Hausse
-    "g1 >= seuil_stable", "g2 >= seuil_stable", "a > seuil_accel_pos",
+    "g1 > seuil_stable & g1 <= seuil_g1_haut", "g2 >= seuil_stable", "a > seuil_accel_pos",
     "acc\u00E9l\u00E8re", "acc\u00E9l\u00E8rent", "une acc\u00E9l\u00E9ration",
 
-    "g1 >= seuil_stable", "g2 >= seuil_stable", "a >= seuil_accel_neg & a <= seuil_accel_pos",
+    "g1 > seuil_stable & g1 <= seuil_g1_haut", "g2 >= seuil_stable", "a >= seuil_accel_neg & a <= seuil_accel_pos",
     "poursuit sa hausse", "poursuivent leur hausse", "une poursuite de la hausse",
 
-    "g1 >= seuil_stable", "g2 >= seuil_stable", "a < seuil_accel_neg",
+    "g1 > seuil_stable & g1 <= seuil_g1_haut", "g2 >= seuil_stable", "a < seuil_accel_neg",
     "ralentit", "ralentissent", "un ralentissement",
 
-    "g1 >= seuil_stable", "g2 >= seuil_g2_bas & g2 < seuil_stable", "TRUE",
+    "g1 > seuil_stable & g1 <= seuil_g1_haut", "g2 >= seuil_g2_bas & g2 < seuil_stable", "TRUE",
     "augmente", "augmentent", "une hausse",
 
-    "g1 >= seuil_stable", "g2 < seuil_g2_bas", "TRUE",
+    "g1 > seuil_stable & g1 <= seuil_g1_haut", "g2 < seuil_g2_bas", "TRUE",
     "repart \u00E0 la hausse", "repartent \u00E0 la hausse", "un rebond",
 
     # Stabilite
-    "abs(g1) < seuil_stable", "abs(g2) >= seuil_stable", "TRUE",
+    "abs(g1) <= seuil_stable", "abs(g2) >= seuil_stable", "TRUE",
     "se stabilise", "se stabilisent", "une stabilisation",
 
-    "abs(g1) < seuil_stable", "abs(g2) < seuil_stable", "TRUE",
+    "abs(g1) <= seuil_stable", "abs(g2) < seuil_stable", "TRUE",
     "reste stable", "restent stables", "une stabilit\u00E9",
 
     # Baisse

@@ -92,33 +92,33 @@ init_serad_en <- function() {
     "g1 > seuil_g1_tres_haut", "TRUE", "TRUE",
     "soared", "soared", "a surge",
 
-    "g1 <= seuil_g1_tres_haut & g1 > seuil_g1_haut", "g2 >= seuil_g2_bas", "TRUE",
+    "g1 > seuil_g1_haut & g1 <= seuil_g1_tres_haut", "g2 >= seuil_g2_bas", "TRUE",
     "increased sharply", "increased sharply", "a sharp increase",
 
-    "g1 <= seuil_g1_tres_haut & g1 > seuil_g1_haut", "g2 < seuil_g2_bas", "TRUE",
+    "g1 > seuil_g1_haut & g1 <= seuil_g1_tres_haut", "g2 < seuil_g2_bas", "TRUE",
     "rebounded sharply", "rebounded sharply", "a sharp rebound",
 
     # Strong increase
-    "g1 >= seuil_stable", "g2 >= seuil_stable", "a > seuil_accel_hausse",
+    "g1 > seuil_stable & g1 <= seuil_g1_haut", "g2 >= seuil_stable", "a > seuil_accel_hausse",
     "accelerated", "accelerated", "an acceleration",
 
-    "g1 >= seuil_stable", "g2 >= seuil_stable", "a >= seuil_accel_baisse & a <= seuil_accel_hausse",
+    "g1 > seuil_stable & g1 <= seuil_g1_haut", "g2 >= seuil_stable", "a >= seuil_accel_baisse & a <= seuil_accel_hausse",
     "continued to rise", "continued to rise", "continued growth",
 
-    "g1 >= seuil_stable", "g2 >= seuil_stable", "a < seuil_accel_baisse",
+    "g1 > seuil_stable & g1 <= seuil_g1_haut", "g2 >= seuil_stable", "a < seuil_accel_baisse",
     "slowed", "slowed", "a slowdown",
 
-    "g1 >= seuil_stable", "g2 >= seuil_g2_bas & g2 < seuil_stable", "TRUE",
+    "g1 > seuil_stable & g1 <= seuil_g1_haut", "g2 >= seuil_g2_bas & g2 < seuil_stable", "TRUE",
     "increased", "increased", "an increase",
 
-    "g1 >= seuil_stable", "g2 < seuil_g2_bas", "TRUE",
+    "g1 > seuil_stable & g1 <= seuil_g1_haut", "g2 < seuil_g2_bas", "TRUE",
     "rebounded", "rebounded", "a rebound",
 
     # Stability
-    "abs(g1) < seuil_stable", "abs(g2) >= seuil_stable", "TRUE",
+    "abs(g1) <= seuil_stable", "abs(g2) >= seuil_stable", "TRUE",
     "stabilised", "stabilised", "a stabilisation",
 
-    "abs(g1) < seuil_stable", "abs(g2) < seuil_stable", "TRUE",
+    "abs(g1) <= seuil_stable", "abs(g2) < seuil_stable", "TRUE",
     "remained stable", "remained stable", "stability",
 
     # Decline

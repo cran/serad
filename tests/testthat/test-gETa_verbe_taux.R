@@ -16,7 +16,7 @@ test_that("gETa_verbe_taux - partition principale", {
 
   # ---- Progression simple ----
   expect_equal(gETa_verbe_taux(1, 1),
-               "poursuit sa hausse")
+               "augmente de nouveau")
 
   # ---- Forte baisse ----
   expect_equal(gETa_verbe_taux(-20, 1),
@@ -41,15 +41,15 @@ test_that("gETa_verbe_taux - aléatoire", {
 
   # ---- Hausse ----
   res <- gETa_verbe_taux(1, 1, alea = 0.5)
-  expect_true(res %in% c("poursuit sa hausse", "continue d'augmenter"))
+  expect_true(res %in% c("augmente de nouveau", "continue d'augmenter"))
 
   # ---- Rebond ----
   res <- gETa_verbe_taux(0.1, -1, alea = 0.5)
   expect_true(res %in% c("repart à la hausse", "se redresse"))
 
   # ---- Baisse ----
-  res <- gETa_verbe_taux(-0.1, -1, alea = 0.5)
-  expect_true(res %in% c("ralentit dans sa baisse", "baisse moins fortement"))
+  res <- gETa_verbe_taux(-0.1, -1, alea = 1)
+  expect_true(res %in% c("baisse moins fortement qu'au mois pécédent", "baisse moins fortement"))
 
   # ---- Chute ----
   res <- gETa_verbe_taux(-21, 1, alea = 0.5)

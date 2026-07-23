@@ -26,7 +26,7 @@ test_that("gETa_nom - hiérarchie des cas", {
   # ---- Hausse simple ----
   expect_equal(
     gETa_nom(1.01, 1, 0.99),
-    "une poursuite de la hausse"
+    "une nouvelle hausse"
   )
 
 
@@ -95,7 +95,7 @@ test_that("gETa_nom - aléatoire", {
 
   # ---- Baisse ----
   res <- gETa_nom(0.99, 1, 1.01, alea = 0.5)
-  expect_true(res %in% c("une poursuite de la baisse", "une poursuite de la baisse"))
+  expect_true(res %in% c("une nouvelle baisse", "une poursuite de la baisse"))
 
   # ---- Chute ----
   res <- gETa_nom(0.79, 1, 1.01, alea = 0.5)

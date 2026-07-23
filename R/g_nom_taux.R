@@ -15,18 +15,28 @@
 #'
 #' @details
 #' La fonction sélectionne, dans la table
-#' `getOption("serad")$evo_simple`, la première ligne dont
-#' le seuil est strictement inférieur à `g`.
+#' `getOption("serad")$evo_simple`, la ligne dont la condition est vérifiée
+#' par la valeur de `g`.
 #'
-#' Elle renvoie ensuite la colonne `nom` correspondante.
-#' Si `titre = TRUE`, l'article initial est supprimé et la
-#' première lettre restante est mise en majuscule.
+#' La table `evo_simple` doit contenir une colonne `condition`, composée de
+#' chaînes de caractères évaluables par R, par exemple :
+#' `"g >= -0.10 & g <= 0.10"`.
+#'
+#' Les conditions doivent être disjointes : pour une valeur donnée de `g`,
+#' une seule condition doit être vraie.
+#'
+#' Une catégorie est considérée comme une stabilité si sa condition est
+#' également vérifiée pour `g = 0`.
+#'
+#' La fonction renvoie ensuite la colonne `nom` correspondante.
+#' Si `titre = TRUE`, l'article initial est supprimé et la première lettre
+#' restante est mise en majuscule.
 #'
 #' @section Personnalisation:
 #' Les formulations utilisées par cette fonction proviennent de la table
 #' `getOption("serad")$evo_simple`.
 #'
-#' Pour modifier les seuils ou les libellés, voir
+#' Pour modifier les conditions ou les libellés, voir
 #' \code{\link{init_serad}}.
 #'
 #' @examples
@@ -35,6 +45,7 @@
 #' g_nom_taux(0.4)
 #' g_nom_taux(0.1)
 #' g_nom_taux(0)
+#' g_nom_taux(-0.1)
 #' g_nom_taux(-0.3)
 #' g_nom_taux(-1)
 #' g_nom_taux(-4)
@@ -59,13 +70,39 @@ g_nom_taux <- function(g, titre = FALSE, lang = get_serad_language()) {
     stop("serad$evo_simple doit \u00EAtre une data.frame.")
   }
 
-  cols_attendues <- c("seuil", "nom")
+  cols_attendues <- c("condition", "nom")
   if (!all(cols_attendues %in% names(tab))) {
-    stop("serad$evo_simple doit contenir : seuil, nom.")
+    stop("serad$evo_simple doit contenir : condition, nom.")
   }
 
-  i <- which(g > tab$seuil)[1]
-  if (is.na(i)) i <- nrow(tab)
+  # ---- s\u00E9lection ----
+  test_conditions <- vapply(
+    tab$condition,
+    function(condition) {
+      eval(parse(text = condition), envir = list(g = g))
+    },
+    logical(1)
+  )
+
+  i <- which(test_conditions)
+
+  if (length(i) == 0) {
+    stop("Aucune cat\u00E9gorie trouv\u00E9e pour g = ", g, call. = FALSE)
+  }
+
+  if (length(i) > 1) {
+    stop(
+      "Plusieurs cat\u00E9gories trouv\u00E9es pour g = ",
+      g,
+      ". Les conditions de serad$evo_simple ne sont pas disjointes.",
+      call. = FALSE
+    )
+  }
+
+  # ---- stabilit\u00E9 ----
+  est_stable <- isTRUE(
+    eval(parse(text = tab$condition[i]), envir = list(g = 0))
+  )
 
   res <- as.character(tab$nom[i])
 

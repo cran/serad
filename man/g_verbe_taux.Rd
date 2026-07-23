@@ -36,8 +36,15 @@ d'une éventuelle accélération, et suivie de la valeur formatée.
 }
 \details{
 La fonction sélectionne, dans la table
-\code{getOption("serad")$evo_simple}, la première ligne dont
-le seuil est strictement inférieur à \code{g}.
+\code{getOption("serad")$evo_simple}, la ligne dont la condition est vérifiée
+par la valeur de \code{g}.
+
+La table \code{evo_simple} doit contenir une colonne \code{condition}, composée de
+chaînes de caractères évaluables par R, par exemple :
+\code{"g >= -0.10 & g <= 0.10"}.
+
+Les conditions doivent être disjointes : pour une valeur donnée de \code{g},
+une seule condition doit être vraie.
 
 Si \code{sing = TRUE}, la fonction renvoie la colonne \code{verbe_sing}.
 Sinon, elle renvoie \code{verbe_plur}.
@@ -47,13 +54,15 @@ Sinon, elle renvoie \code{verbe_plur}.
 Les formulations utilisées par cette fonction proviennent de la table
 \code{getOption("serad")$evo_simple}.
 
-Pour modifier les seuils ou les libellés, voir
+Pour modifier les conditions ou les libellés, voir
 \code{\link{init_serad}}.
 }
 
 \examples{
 g_verbe_taux(10)
+g_verbe_taux(0.1)
 g_verbe_taux(-0.1)
+g_verbe_taux(-0.1, stable_sans_valeur = FALSE)
 
 }
 \seealso{

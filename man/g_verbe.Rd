@@ -32,7 +32,7 @@ FALSE : affiche la valeur après la formulation de stabilité.}
 }
 \value{
 Une chaîne de caractères correspondant à la formulation verbale
-retenue, par exemple : "bondit de 10,0 \%".
+retenue, par exemple : "augmente de 10,0 \%".
 }
 \description{
 Décrit une évolution sous forme verbale à partir de deux niveaux,
@@ -49,15 +49,21 @@ et \code{x2} :
 }
 
 La valeur obtenue est ensuite transmise à \code{\link{g_verbe_taux}},
-qui détermine la formulation à partir de la table
+qui détermine la formulation à partir des conditions définies dans la table
 \code{getOption("serad")$evo_simple}.
+
+Cette table doit contenir notamment les colonnes \code{condition},
+\code{verbe_sing}, \code{verbe_plur} et \code{nom}.
+
+Les conditions doivent être disjointes : pour une valeur donnée,
+une seule condition doit être vraie.
 }
 \section{Personnalisation}{
 
 Les formulations utilisées par cette fonction proviennent de la table
 \code{getOption("serad")$evo_simple}.
 
-Pour modifier les seuils ou les libellés, voir
+Pour modifier les conditions ou les libellés, voir
 \code{\link{init_serad}}.
 }
 

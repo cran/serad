@@ -1,7 +1,7 @@
 Package: serad
 Title: Standardized Economic Reporting and Automated Dynamic Writing /
         Synthèse d'Écrits Avec des Règles Automatisées et Dynamiques
-Version: 0.2.2
+Version: 0.2.3
 Authors@R: c(
     person("Alexandre", "Cazenave-Lacroutz",
            email = "alexandre.cazenave-lacroutz@sante.gouv.fr",
@@ -36,7 +36,7 @@ Suggests: knitr, rmarkdown, testthat (>= 3.0.0)
 VignetteBuilder: knitr
 Config/testthat/edition: 3
 NeedsCompilation: no
-Packaged: 2026-07-01 14:43:44 UTC; X6QOAN
+Packaged: 2026-07-23 13:21:22 UTC; X6QOAN
 Author: Alexandre Cazenave-Lacroutz [aut] (ORCID:
     <https://orcid.org/0000-0003-3488-6092>),
   Jules Lejas [cre],
@@ -44,4 +44,4 @@ Author: Alexandre Cazenave-Lacroutz [aut] (ORCID:
     statistiques (Dares) [cph]
 Maintainer: Jules Lejas <jules.lejas@gmail.com>
 Repository: CRAN
-Date/Publication: 2026-07-02 03:20:02 UTC
+Date/Publication: 2026-07-23 13:50:02 UTC

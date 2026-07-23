@@ -43,7 +43,7 @@ et \code{x2} :
 }
 
 La valeur obtenue est ensuite transmise à \code{\link{g_nom_taux}},
-qui détermine la formulation à partir de la table
+qui détermine la formulation à partir des conditions définies dans la table
 \code{getOption("serad")$evo_simple}.
 }
 \section{Personnalisation}{
@@ -51,7 +51,11 @@ qui détermine la formulation à partir de la table
 Les formulations utilisées par cette fonction proviennent de la table
 \code{getOption("serad")$evo_simple}.
 
-Pour modifier les seuils ou les libellés, voir
+Cette table doit notamment contenir une colonne \code{condition} et une colonne
+\code{nom}. Les conditions doivent être disjointes, c'est-à-dire qu'une seule
+condition doit être vraie pour une valeur donnée.
+
+Pour modifier les conditions ou les libellés, voir
 \code{\link{init_serad}}.
 }
 

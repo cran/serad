@@ -24,19 +24,29 @@ Décrit une évolution exprimée en pourcentage sous forme nominale
 }
 \details{
 La fonction sélectionne, dans la table
-\code{getOption("serad")$evo_simple}, la première ligne dont
-le seuil est strictement inférieur à \code{g}.
+\code{getOption("serad")$evo_simple}, la ligne dont la condition est vérifiée
+par la valeur de \code{g}.
 
-Elle renvoie ensuite la colonne \code{nom} correspondante.
-Si \code{titre = TRUE}, l'article initial est supprimé et la
-première lettre restante est mise en majuscule.
+La table \code{evo_simple} doit contenir une colonne \code{condition}, composée de
+chaînes de caractères évaluables par R, par exemple :
+\code{"g >= -0.10 & g <= 0.10"}.
+
+Les conditions doivent être disjointes : pour une valeur donnée de \code{g},
+une seule condition doit être vraie.
+
+Une catégorie est considérée comme une stabilité si sa condition est
+également vérifiée pour \code{g = 0}.
+
+La fonction renvoie ensuite la colonne \code{nom} correspondante.
+Si \code{titre = TRUE}, l'article initial est supprimé et la première lettre
+restante est mise en majuscule.
 }
 \section{Personnalisation}{
 
 Les formulations utilisées par cette fonction proviennent de la table
 \code{getOption("serad")$evo_simple}.
 
-Pour modifier les seuils ou les libellés, voir
+Pour modifier les conditions ou les libellés, voir
 \code{\link{init_serad}}.
 }
 
@@ -46,6 +56,7 @@ g_nom_taux(1)
 g_nom_taux(0.4)
 g_nom_taux(0.1)
 g_nom_taux(0)
+g_nom_taux(-0.1)
 g_nom_taux(-0.3)
 g_nom_taux(-1)
 g_nom_taux(-4)

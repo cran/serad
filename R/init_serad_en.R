@@ -34,19 +34,15 @@ init_serad_en <- function() {
   # - un verbe (singulier / pluriel)
   # - une formulation nominale
   evo_simple <- tibble::tribble(
-    ~seuil, ~verbe_sing, ~verbe_plur, ~nom,
+    ~condition,                         ~verbe_sing,                 ~verbe_plur,                 ~nom,
 
-    9.95,   "surged by",              "surged by",              "a sharp increase",
-    3.95,   "rose sharply by",        "rose sharply by",        "a strong increase",
-    0.95,   "rose by",                "rose by",                "an increase",
-    0.25,   "increased by",           "increased by",           "a moderate increase",
-    0.05,   "edged up by",            "edged up by",            "a slight increase",
-    -0.15,  "was stable",             "were stable",            "stability",
-    -0.35,  "decreased slightly by",  "decreased slightly by",  "a slight decline",
-    -1.05,  "fell slightly by",       "fell slightly by",       "a moderate decline",
-    -4.05,  "decreased by",           "decreased by",           "a decline",
-    -20.05, "fell by",                "fell by",                "a sharp decline",
-    -Inf,   "plunged by",             "plunged by",             "a collapse"
+    "g > 6.95",                         "increased sharply by",       "increased sharply by",       "a sharp increase",
+    "g > 0.95 & g <= 6.95",             "increased by",               "increased by",               "an increase",
+    "g > 0.05 & g <= 0.95",             "increased slightly by",      "increased slightly by",      "a slight increase",
+    "g >= -0.05 & g <= 0.05",           "was stable at",              "were stable at",                "stability",
+    "g >= -0.95 & g < -0.05",           "decreased slightly by",      "decreased slightly by",      "a slight decrease",
+    "g >= -6.95 & g < -0.95",           "decreased by",               "decreased by",               "a decrease",
+    "g < -6.95",                        "decreased sharply by",       "decreased sharply by",       "a sharp decrease"
   )
 
   serad0$evo_simple <- evo_simple
@@ -68,7 +64,7 @@ init_serad_en <- function() {
     seuil_g1_bas = -10,
     seuil_g1_tres_bas = -20,
 
-    seuil_g2_bas = -0.5,
+    seuil_g2_bas = -0.95,
     seuil_g2_haut = 0.95,
 
     seuil_accel_pos = 30,
@@ -103,7 +99,7 @@ init_serad_en <- function() {
     "accelerated", "accelerated", "an acceleration",
 
     "g1 > seuil_stable & g1 <= seuil_g1_haut", "g2 >= seuil_stable", "a >= seuil_accel_baisse & a <= seuil_accel_hausse",
-    "continued to rise", "continued to rise", "continued growth",
+    "increased again", "increased again", "a renewed increase",
 
     "g1 > seuil_stable & g1 <= seuil_g1_haut", "g2 >= seuil_stable", "a < seuil_accel_baisse",
     "slowed", "slowed", "a slowdown",
@@ -129,13 +125,13 @@ init_serad_en <- function() {
     "decreased", "decreased", "a decrease",
 
     "g1 >= seuil_g1_bas & g1 < -seuil_stable", "g2 < -seuil_stable", "a > seuil_accel_pos",
-    "declined again", "declined again", "a renewed decline",
+    "declined more sharply than in the previous month", "declined more sharply than in the previous month", "a sharper decline",
 
     "g1 >= seuil_g1_bas & g1 < -seuil_stable", "g2 < -seuil_stable", "a >= seuil_accel_neg & a <= seuil_accel_pos",
-    "continued to decrease", "continued to decrease", "a continued decrease",
+    "decreased again", "decreased again", "a renewed decrease",
 
     "g1 >= seuil_g1_bas & g1 < -seuil_stable", "g2 < -seuil_stable", "a < seuil_accel_neg",
-    "declined at a slower pace", "declined at a slower pace", "a slowdown in the decline",
+    "declined less sharply than in the previous month", "declined less sharply than in the previous month", "a slowdown in the decline",
 
     # Sharp decline
     "g1 >= seuil_g1_tres_bas & g1 < seuil_g1_bas", "g2 > seuil_g2_haut", "TRUE",
@@ -145,7 +141,7 @@ init_serad_en <- function() {
     "fell sharply", "fell sharply", "a sharp decline",
 
     "g1 < seuil_g1_tres_bas", "TRUE", "TRUE",
-    "collapsed", "collapsed", "a collapse"
+    "plunged", "plunged", "a plunge"
   )
 
   # Table alternative utilisee par :

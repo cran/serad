@@ -18,7 +18,7 @@ test_that("gETa_nom_taux - hiérarchie des cas", {
 
   # ---- Hausse ----
   expect_equal(gETa_nom_taux(1, 1),
-               "une poursuite de la hausse")
+               "une nouvelle hausse")
 
 
   # ---- Ralentissement ----
@@ -55,7 +55,7 @@ test_that("gETa_nom_taux - aléatoire", {
 
   # ---- Hausse ----
   res <- gETa_nom_taux(1, 1, alea = 0.5)
-  expect_true(res %in% c("une poursuite de la hausse", "le prolongement de la hausse"))
+  expect_true(res %in% c("une nouvelle hausse", "le prolongement de la hausse"))
 
   # ---- Rebond ----
   res <- gETa_nom_taux(0.1, -1, alea = 0.5)

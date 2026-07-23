@@ -32,7 +32,7 @@ test_that("gETa_verbe - pipeline complet", {
   # ---- Progression simple ----
   expect_equal(
     gETa_verbe(1.01, 1, 0.99),
-    "poursuit sa hausse"
+    "augmente de nouveau"
   )
 
   # ---- Forte baisse ----
@@ -64,12 +64,12 @@ test_that("gETa_verbe - pipeline complet", {
 
   expect_equal(
     gETa_verbe(0.999,1,1.01),
-    "ralentit dans sa baisse"
+    "baisse moins fortement qu'au mois pécédent"
   )
 
   expect_equal(
     gETa_verbe(0.96,1,1.01),
-    "recule de nouveau"
+    "baisse plus fortement qu'au mois pécédent"
   )
 
   expect_equal(
@@ -84,7 +84,7 @@ test_that("gETa_verbe - aléatoire", {
 
   # ---- Accélération ----
   res <- gETa_verbe(1.1, 1, 0.99, alea = 0.5)
-  expect_true(res %in% c("augmente fortement", "cro\u00eet fortement"))
+  expect_true(res %in% c("augmente fortement", "croît fortement"))
 
   # ---- Stabilisation ----
   res <- gETa_verbe(1.00049, 1, 0.98, alea = 0.5)
@@ -102,7 +102,7 @@ test_that("gETa_verbe - aléatoire", {
 
   # ---- Baisse ----
   res <- gETa_verbe(0.99, 1, 1.01, alea = 0.5)
-  expect_true(res %in% c("poursuit sa baisse", "poursuit sa baisse"))
+  expect_true(res %in% c("baisse de nouveau", "poursuit sa baisse"))
 
   # ---- Chute ----
   res <- gETa_verbe(0.79, 1, 1.01, alea = 0.5)

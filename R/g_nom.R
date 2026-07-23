@@ -26,14 +26,18 @@
 #' }
 #'
 #' La valeur obtenue est ensuite transmise à \code{\link{g_nom_taux}},
-#' qui détermine la formulation à partir de la table
+#' qui détermine la formulation à partir des conditions définies dans la table
 #' `getOption("serad")$evo_simple`.
 #'
 #' @section Personnalisation:
 #' Les formulations utilisées par cette fonction proviennent de la table
 #' `getOption("serad")$evo_simple`.
 #'
-#' Pour modifier les seuils ou les libellés, voir
+#' Cette table doit notamment contenir une colonne `condition` et une colonne
+#' `nom`. Les conditions doivent être disjointes, c'est-à-dire qu'une seule
+#' condition doit être vraie pour une valeur donnée.
+#'
+#' Pour modifier les conditions ou les libellés, voir
 #' \code{\link{init_serad}}.
 #'
 #' @seealso

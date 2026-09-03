@@ -1,4 +1,4 @@
-5275f7026136ac1984883b5acf92312c *DESCRIPTION
+a31933290b74a8b1904d9307538bd9f5 *DESCRIPTION
 8db178dae9afe26425dc98d8e33be035 *LICENSE
 f600d1a0713d88b9e1ea61812e19944d *NAMESPACE
 69650adbb5270bb83e484abcfb1b0139 *NEWS.md
@@ -21,8 +21,8 @@ dd67774b5c443f6d8d60c73f7b5525e9 *R/gETa_verbe_taux.R
 8013c93f0b520a64e57db038035089c7 *R/g_verbe.R
 ba5d07f580511131b50953e2aa7d5b60 *R/g_verbe_taux.R
 eb0f2b552049c437a48d4ef2cc5cbdfb *R/init_serad_doc.R
-069d5f6d4562fa5ce1d277220bef4fc2 *R/init_serad_en.R
-dbf8fa071e60099ef9f8dd06a97e1894 *R/init_serad_fr.R
+ed7024b781b88e03a48a817a88168efe *R/init_serad_en.R
+c97f3327233a95c8444863712bf49b5d *R/init_serad_fr.R
 e29dd4f1c4537b285c54a803566af50d *R/plushautniveau.R
 1f5656f1caf5dccf63b2c0295aa4ba70 *R/quelTrim.R
 9f9e41cb74a5702cc71152a9371a3b8b *R/s.R
@@ -34,7 +34,7 @@ eabd7c5a382b880d45cc1502fcb5908b *inst/doc/exemple.Rmd
 dc82e927c5ce11e7e8122da126f51838 *inst/doc/exemple.html
 521e5bc388e8d070cdbe6da9e9cd3b41 *inst/doc/serad.R
 7e077d49f0d653652de21cc65b07cfa0 *inst/doc/serad.Rmd
-b7f67f574ceddcfb82d4e7449233e136 *inst/doc/serad.html
+dfa9b6da7c467ff09c6c42d66f26047a *inst/doc/serad.html
 dac7637aa3a3c48eda5dbb10bf835113 *inst/logo.png
 ff65c3e46226fb972b50ad108f16cad5 *man/a.Rd
 0cabc1b9bf575539fd67b0d72f599400 *man/alahausse.Rd
@@ -82,10 +82,10 @@ e7cba461984d624766c246de17ae5850 *tests/testthat/test-format_g.R
 89f7447c6edef4bd36137a3e1c13033a *tests/testthat/test-format_niv.R
 1cc4b8a6640824c5799666ae4690d9b0 *tests/testthat/test-format_pts.R
 fc87e0e8d28c730ddb413bcebfb0226e *tests/testthat/test-g.R
-cb1e1f7ee8b5a7a800bfb2d272265b0b *tests/testthat/test-gETa_nom.R
-e2065fef2cefa6bb0b45e0bde841a673 *tests/testthat/test-gETa_nom_taux.R
-9b6ce83edd110e7fe691c2fc85678933 *tests/testthat/test-gETa_verbe.R
-e426057fbe4ba4d28573aab8d0a906a4 *tests/testthat/test-gETa_verbe_taux.R
+10b7442f221f172cba4ba896d4e9d6a4 *tests/testthat/test-gETa_nom.R
+b6a662ca5d48d2ef75a2ccd8065ce1e5 *tests/testthat/test-gETa_nom_taux.R
+fcf1602d562970b302e155876c889327 *tests/testthat/test-gETa_verbe.R
+f3d82989c3bbd92325833e25466e9b59 *tests/testthat/test-gETa_verbe_taux.R
 316de8c4079ff8b07fc552faaf57b8ef *tests/testthat/test-g_nom.R
 dd3834104dd910c5e6620c77c5137dcf *tests/testthat/test-g_nom_taux.R
 fb3fe3bfbcb1f70f9125150c4fc6e8d4 *tests/testthat/test-g_verbe.R

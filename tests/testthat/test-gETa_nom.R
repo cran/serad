@@ -39,7 +39,7 @@ test_that("gETa_nom - hiérarchie des cas", {
 
   # ---- Rebond ----
   expect_equal(
-    gETa_nom(1.001, 1, 1.01),
+    gETa_nom(1.002, 1, 1.01),
     "un rebond"
   )
 
@@ -90,7 +90,7 @@ test_that("gETa_nom - aléatoire", {
   expect_true(res %in% c("une hausse", "une progression"))
 
   # ---- Rebond ----
-  res <- gETa_nom(1.001, 1, 1.01, alea = 0.5)
+  res <- gETa_nom(1.002, 1, 1.01, alea = 0.5)
   expect_true(res %in% c("un rebond", "un redressement"))
 
   # ---- Baisse ----

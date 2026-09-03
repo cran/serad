@@ -57,15 +57,13 @@ init_serad_en <- function() {
   #
   # Définissent la logique d'accélération / ralentissement
   serad0$seuil <- list(
-    seuil_stable = 0.05,
+    seuil_stable_neg = -0.1,
+    seuil_stable_pos = 0.1,
 
     seuil_g1_tres_haut = 20,
     seuil_g1_haut = 10,
     seuil_g1_bas = -10,
     seuil_g1_tres_bas = -20,
-
-    seuil_g2_bas = -0.95,
-    seuil_g2_haut = 0.95,
 
     seuil_accel_pos = 30,
     seuil_accel_neg = -30
@@ -88,56 +86,56 @@ init_serad_en <- function() {
     "g1 > seuil_g1_tres_haut", "TRUE", "TRUE",
     "soared", "soared", "a surge",
 
-    "g1 > seuil_g1_haut & g1 <= seuil_g1_tres_haut", "g2 >= seuil_g2_bas", "TRUE",
+    "g1 > seuil_g1_haut & g1 <= seuil_g1_tres_haut", "g2 >= seuil_stable_neg", "TRUE",
     "increased sharply", "increased sharply", "a sharp increase",
 
-    "g1 > seuil_g1_haut & g1 <= seuil_g1_tres_haut", "g2 < seuil_g2_bas", "TRUE",
+    "g1 > seuil_g1_haut & g1 <= seuil_g1_tres_haut", "g2 < seuil_stable_neg", "TRUE",
     "rebounded sharply", "rebounded sharply", "a sharp rebound",
 
-    # Strong increase
-    "g1 > seuil_stable & g1 <= seuil_g1_haut", "g2 >= seuil_stable", "a > seuil_accel_hausse",
+    # Increase
+    "g1 > seuil_stable_pos & g1 <= seuil_g1_haut", "g2 >= seuil_stable_pos", "a > seuil_accel_pos",
     "accelerated", "accelerated", "an acceleration",
 
-    "g1 > seuil_stable & g1 <= seuil_g1_haut", "g2 >= seuil_stable", "a >= seuil_accel_baisse & a <= seuil_accel_hausse",
+    "g1 > seuil_stable_pos & g1 <= seuil_g1_haut", "g2 >= seuil_stable_pos", "a >= seuil_accel_neg & a <= seuil_accel_pos",
     "increased again", "increased again", "a renewed increase",
 
-    "g1 > seuil_stable & g1 <= seuil_g1_haut", "g2 >= seuil_stable", "a < seuil_accel_baisse",
+    "g1 > seuil_stable_pos & g1 <= seuil_g1_haut", "g2 >= seuil_stable_pos", "a < seuil_accel_neg",
     "slowed", "slowed", "a slowdown",
 
-    "g1 > seuil_stable & g1 <= seuil_g1_haut", "g2 >= seuil_g2_bas & g2 < seuil_stable", "TRUE",
+    "g1 > seuil_stable_pos & g1 <= seuil_g1_haut", "g2 >= seuil_stable_neg & g2 < seuil_stable_pos", "TRUE",
     "increased", "increased", "an increase",
 
-    "g1 > seuil_stable & g1 <= seuil_g1_haut", "g2 < seuil_g2_bas", "TRUE",
+    "g1 > seuil_stable_pos & g1 <= seuil_g1_haut", "g2 < seuil_stable_neg", "TRUE",
     "rebounded", "rebounded", "a rebound",
 
     # Stability
-    "abs(g1) <= seuil_stable", "abs(g2) >= seuil_stable", "TRUE",
+    "abs(g1) <= seuil_stable_pos", "abs(g2) > seuil_stable_pos", "TRUE",
     "stabilised", "stabilised", "a stabilisation",
 
-    "abs(g1) <= seuil_stable", "abs(g2) < seuil_stable", "TRUE",
+    "abs(g1) <= seuil_stable_pos", "abs(g2) <= seuil_stable_pos", "TRUE",
     "remained stable", "remained stable", "stability",
 
     # Decline
-    "g1 >= seuil_g1_bas & g1 < -seuil_stable", "g2 > seuil_g2_haut", "TRUE",
+    "g1 >= seuil_g1_bas & g1 < seuil_stable_neg", "g2 > seuil_stable_pos", "TRUE",
     "fell back", "fell back", "a fallback",
 
-    "g1 >= seuil_g1_bas & g1 < -seuil_stable", "g2 >= -seuil_stable & g2 <= seuil_g2_haut", "TRUE",
+    "g1 >= seuil_g1_bas & g1 < seuil_stable_neg", "g2 >= seuil_stable_neg & g2 <= seuil_stable_pos", "TRUE",
     "decreased", "decreased", "a decrease",
 
-    "g1 >= seuil_g1_bas & g1 < -seuil_stable", "g2 < -seuil_stable", "a > seuil_accel_pos",
+    "g1 >= seuil_g1_bas & g1 < seuil_stable_neg", "g2 < seuil_stable_neg", "a > seuil_accel_pos",
     "declined more sharply than in the previous month", "declined more sharply than in the previous month", "a sharper decline",
 
-    "g1 >= seuil_g1_bas & g1 < -seuil_stable", "g2 < -seuil_stable", "a >= seuil_accel_neg & a <= seuil_accel_pos",
+    "g1 >= seuil_g1_bas & g1 < seuil_stable_neg", "g2 < seuil_stable_neg", "a >= seuil_accel_neg & a <= seuil_accel_pos",
     "decreased again", "decreased again", "a renewed decrease",
 
-    "g1 >= seuil_g1_bas & g1 < -seuil_stable", "g2 < -seuil_stable", "a < seuil_accel_neg",
+    "g1 >= seuil_g1_bas & g1 < seuil_stable_neg", "g2 < seuil_stable_neg", "a < seuil_accel_neg",
     "declined less sharply than in the previous month", "declined less sharply than in the previous month", "a slowdown in the decline",
 
     # Sharp decline
-    "g1 >= seuil_g1_tres_bas & g1 < seuil_g1_bas", "g2 > seuil_g2_haut", "TRUE",
+    "g1 >= seuil_g1_tres_bas & g1 < seuil_g1_bas", "g2 > seuil_stable_pos", "TRUE",
     "fell back sharply", "fell back sharply", "a sharp fallback",
 
-    "g1 >= seuil_g1_tres_bas & g1 < seuil_g1_bas", "g2 <= seuil_g2_haut", "TRUE",
+    "g1 >= seuil_g1_tres_bas & g1 < seuil_g1_bas", "g2 <= seuil_stable_pos", "TRUE",
     "fell sharply", "fell sharply", "a sharp decline",
 
     "g1 < seuil_g1_tres_bas", "TRUE", "TRUE",

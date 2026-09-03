@@ -34,15 +34,15 @@ init_serad_fr <- function() {
   # - un verbe (singulier / pluriel)
   # - une formulation nominale
   evo_simple <- tibble::tribble(
-    ~condition,                         ~verbe_sing,                                  ~verbe_plur,                                    ~nom,
+    ~condition,               ~verbe_sing,                        ~verbe_plur,                          ~nom,
 
-    "g > 6.95",                         "augmente fortement de",                       "augmentent fortement de",                       "une forte hausse",
-    "g > 0.95 & g <= 6.95",             "augmente de",                                 "augmentent de",                                 "une hausse",
-    "g > 0.10 & g <= 0.95",             "augmente l\u00E9g\u00E8rement de",             "augmentent l\u00E9g\u00E8rement de",             "une l\u00E9g\u00E8re hausse",
-    "g >= -0.10 & g <= 0.10",           "est stable \u00E0",                            "sont stables \u00E0",                            "une stabilit\u00E9",
-    "g >= -0.95 & g < -0.10",           "baisse l\u00E9g\u00E8rement de",                "baissent l\u00E9g\u00E8rement de",                "une l\u00E9g\u00E8re baisse",
-    "g >= -6.95 & g < -0.95",           "baisse de",                                   "baissent de",                                   "une baisse",
-    "g < -6.95",                        "baisse fortement de",                         "baissent fortement de",                         "une forte baisse"
+    "g > 6.95",               "augmente fortement de",            "augmentent fortement de",            "une forte hausse",
+    "g > 0.95 & g <= 6.95",   "augmente de",                      "augmentent de",                      "une hausse",
+    "g > 0.10 & g <= 0.95",   "augmente l\u00E9g\u00E8rement de", "augmentent l\u00E9g\u00E8rement de", "une l\u00E9g\u00E8re hausse",
+    "g >= -0.10 & g <= 0.10", "est stable \u00E0",                "sont stables \u00E0",                "une stabilit\u00E9",
+    "g >= -0.95 & g < -0.10", "baisse l\u00E9g\u00E8rement de",   "baissent l\u00E9g\u00E8rement de",   "une l\u00E9g\u00E8re baisse",
+    "g >= -6.95 & g < -0.95", "baisse de",                        "baissent de",                        "une baisse",
+    "g < -6.95",              "baisse fortement de",              "baissent fortement de",              "une forte baisse"
   )
 
   serad0$evo_simple <- evo_simple
@@ -57,15 +57,13 @@ init_serad_fr <- function() {
   #
   # Definissent la logique d'acceleration / ralentissement
   serad0$seuil <- list(
-    seuil_stable = 0.05,
+    seuil_stable_neg = -0.1,
+    seuil_stable_pos = 0.1,
 
     seuil_g1_tres_haut = 20,
     seuil_g1_haut = 10,
     seuil_g1_bas = -10,
     seuil_g1_tres_bas = -20,
-
-    seuil_g2_bas = -0.95,
-    seuil_g2_haut = 0.95,
 
     seuil_accel_pos = 30,
     seuil_accel_neg = -30
@@ -88,56 +86,56 @@ init_serad_fr <- function() {
     "g1 > seuil_g1_tres_haut", "TRUE", "TRUE",
     "s'envole", "s'envolent", "une envol\u00e9e",
 
-    "g1 > seuil_g1_haut & g1 <= seuil_g1_tres_haut", "g2 >= seuil_g2_bas", "TRUE",
+    "g1 > seuil_g1_haut & g1 <= seuil_g1_tres_haut", "g2 >= seuil_stable_neg", "TRUE",
     "augmente fortement", "augmentent fortement", "une forte hausse",
 
-    "g1 > seuil_g1_haut & g1 <= seuil_g1_tres_haut", "g2 < seuil_g2_bas", "TRUE",
+    "g1 > seuil_g1_haut & g1 <= seuil_g1_tres_haut", "g2 < seuil_stable_neg", "TRUE",
     "repart fortement \u00E0 la hausse", "repartent fortement \u00E0 la hausse", "un fort rebond",
 
     # Hausse
-    "g1 > seuil_stable & g1 <= seuil_g1_haut", "g2 > seuil_stable", "a > seuil_accel_pos",
+    "g1 > seuil_stable_pos & g1 <= seuil_g1_haut", "g2 > seuil_stable_pos", "a > seuil_accel_pos",
     "acc\u00E9l\u00E8re", "acc\u00E9l\u00E8rent", "une acc\u00E9l\u00E9ration",
 
-    "g1 > seuil_stable & g1 <= seuil_g1_haut", "g2 > seuil_stable", "a >= seuil_accel_neg & a <= seuil_accel_pos",
+    "g1 > seuil_stable_pos & g1 <= seuil_g1_haut", "g2 > seuil_stable_pos", "a >= seuil_accel_neg & a <= seuil_accel_pos",
     "augmente de nouveau", "augmente de nouveau", "une nouvelle hausse",
 
-    "g1 > seuil_stable & g1 <= seuil_g1_haut", "g2 > seuil_stable", "a < seuil_accel_neg",
+    "g1 > seuil_stable_pos & g1 <= seuil_g1_haut", "g2 > seuil_stable_pos", "a < seuil_accel_neg",
     "ralentit", "ralentissent", "un ralentissement",
 
-    "g1 > seuil_stable & g1 <= seuil_g1_haut", "g2 >= seuil_g2_bas & g2 <= seuil_stable", "TRUE",
+    "g1 > seuil_stable_pos & g1 <= seuil_g1_haut", "g2 >= seuil_stable_neg & g2 <= seuil_stable_pos", "TRUE",
     "augmente", "augmentent", "une hausse",
 
-    "g1 > seuil_stable & g1 <= seuil_g1_haut", "g2 < seuil_g2_bas", "TRUE",
+    "g1 > seuil_stable_pos & g1 <= seuil_g1_haut", "g2 < seuil_stable_neg", "TRUE",
     "repart \u00E0 la hausse", "repartent \u00E0 la hausse", "un rebond",
 
     # Stabilite
-    "abs(g1) <= seuil_stable", "abs(g2) >= seuil_stable", "TRUE",
+    "abs(g1) <= seuil_stable_pos", "abs(g2) > seuil_stable_pos", "TRUE",
     "se stabilise", "se stabilisent", "une stabilisation",
 
-    "abs(g1) <= seuil_stable", "abs(g2) < seuil_stable", "TRUE",
+    "abs(g1) <= seuil_stable_pos", "abs(g2) <= seuil_stable_pos", "TRUE",
     "reste stable", "restent stables", "une stabilit\u00E9",
 
     # Baisse
-    "g1 >= seuil_g1_bas & g1 < -seuil_stable", "g2 > seuil_g2_haut", "TRUE",
+    "g1 >= seuil_g1_bas & g1 < seuil_stable_neg", "g2 > seuil_stable_pos", "TRUE",
     "se replie", "se replient", "un repli",
 
-    "g1 >= seuil_g1_bas & g1 < -seuil_stable", "g2 >= -seuil_stable & g2 <= seuil_g2_haut", "TRUE",
+    "g1 >= seuil_g1_bas & g1 < seuil_stable_neg", "g2 >= seuil_stable_neg & g2 <= seuil_stable_pos", "TRUE",
     "baisse", "baissent", "une baisse",
 
-    "g1 >= seuil_g1_bas & g1 < -seuil_stable", "g2 < -seuil_stable", "a > seuil_accel_pos",
-    "baisse plus fortement qu'au mois p\u00E9c\u00E9dent", "baissent plus fortement qu'au mois p\u00E9c\u00E9dent", "un nouveau recul",
+    "g1 >= seuil_g1_bas & g1 < seuil_stable_neg", "g2 < seuil_stable_neg", "a > seuil_accel_pos",
+    "baisse plus fortement qu'au mois pr\u00E9c\u00E9dent", "baissent plus fortement qu'au mois pr\u00E9c\u00E9dent", "un nouveau recul",
 
-    "g1 >= seuil_g1_bas & g1 < -seuil_stable", "g2 < -seuil_stable", "a >= seuil_accel_neg & a <= seuil_accel_pos",
+    "g1 >= seuil_g1_bas & g1 < seuil_stable_neg", "g2 < seuil_stable_neg", "a >= seuil_accel_neg & a <= seuil_accel_pos",
     "baisse de nouveau", "baissent de nouveau", "une nouvelle baisse",
 
-    "g1 >= seuil_g1_bas & g1 < -seuil_stable", "g2 < -seuil_stable", "a < seuil_accel_neg",
-    "baisse moins fortement qu'au mois p\u00E9c\u00E9dent", "baissent moins fortement qu'au mois p\u00E9c\u00E9dent", "un ralentissement de la baisse",
+    "g1 >= seuil_g1_bas & g1 < seuil_stable_neg", "g2 < seuil_stable_neg", "a < seuil_accel_neg",
+    "baisse moins fortement qu'au mois pr\u00E9c\u00E9dent", "baissent moins fortement qu'au mois pr\u00E9c\u00E9dent", "un ralentissement de la baisse",
 
     # Baisse forte
-    "g1 >= seuil_g1_tres_bas & g1 < seuil_g1_bas", "g2 > seuil_g2_haut", "TRUE",
+    "g1 >= seuil_g1_tres_bas & g1 < seuil_g1_bas", "g2 > seuil_stable_pos", "TRUE",
     "se replie fortement", "se replient fortement", "un fort repli",
 
-    "g1 >= seuil_g1_tres_bas & g1 < seuil_g1_bas", "g2 <= seuil_g2_haut", "TRUE",
+    "g1 >= seuil_g1_tres_bas & g1 < seuil_g1_bas", "g2 <= seuil_stable_pos", "TRUE",
     "baisse fortement", "baissent fortement", "une forte baisse",
 
     "g1 < seuil_g1_tres_bas", "TRUE", "TRUE",

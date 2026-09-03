@@ -53,27 +53,27 @@ test_that("gETa_verbe - pipeline complet", {
 
   # ---- Verbe aléatoire ----
   expect_equal(
-    gETa_verbe(1.003,1,0.99,0),
+    gETa_verbe(1.003, 1, 0.99, 0),
     "ralentissent"
   )
 
   expect_equal(
-    gETa_verbe(1.001,1,1.01),
+    gETa_verbe(1.002, 1, 1.01),
     "repart à la hausse"
   )
 
   expect_equal(
-    gETa_verbe(0.999,1,1.01),
-    "baisse moins fortement qu'au mois pécédent"
+    gETa_verbe(0.999, 1, 1.01),
+    "baisse moins fortement qu'au mois précédent"
   )
 
   expect_equal(
-    gETa_verbe(0.96,1,1.01),
-    "baisse plus fortement qu'au mois pécédent"
+    gETa_verbe(0.96, 1, 1.01),
+    "baisse plus fortement qu'au mois précédent"
   )
 
   expect_equal(
-    gETa_verbe(0.96,1,0.99),
+    gETa_verbe(0.96, 1, 0.99),
     "se replie"
   )
 })
@@ -97,7 +97,7 @@ test_that("gETa_verbe - aléatoire", {
   expect_true(res %in% c("augmente", "progresse"))
 
   # ---- Rebond ----
-  res <- gETa_verbe(1.001, 1, 1.01, alea = 0.5)
+  res <- gETa_verbe(1.002, 1, 1.01, alea = 0.5)
   expect_true(res %in% c("repart à la hausse", "se redresse"))
 
   # ---- Baisse ----
